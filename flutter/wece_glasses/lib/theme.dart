@@ -14,14 +14,29 @@ class AppColors {
   */
   // Flutter colors are RGB color codes prefixed with an opacity value.
   // The FF represents full opacity
-  static const color1 = Color(0xFF2A5236);
-  static const color2 = Color(0xFFF7E7CE);
-  static const color3 = Color(0xFFE6ABB5);
+
+
+  static const blue = Color(0xFF022B3A);
+  static const pink = Color(0xFFE83E8C) ;
+  static const green = Color(0xFF78C178);
+  static const white = Color(0xFDFFFFFF);
 }
 
 // ignore: non_constant_identifier_names
 final AppTheme = ThemeData(
   // TODO Add AppTheme
+  final OmbreColor = Container(
+    decoration: BoxDecoration(
+    gradient: LinearGradient(
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+      colors: [
+      color2,
+      color1,
+      ],
+    )
+  )
+);
   // See Flutter theme documentation for details
   // https://flutter.dev/docs/cookbook/design/themes
 );
