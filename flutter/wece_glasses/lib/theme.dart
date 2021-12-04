@@ -22,17 +22,15 @@ class AppColors {
   static const white = Color(0xFDFFFFFF);
 }
 
-const OmbreColor = Container(
-    decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            AppColors.pink,
-            AppColors.blue,
-          ],
-        )
-    )
+const OmbreColor = BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        AppColors.pink,
+        AppColors.blue,
+      ],
+    ),
 );
 
 // ignore: non_constant_identifier_names
