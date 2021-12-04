@@ -22,21 +22,23 @@ class AppColors {
   static const white = Color(0xFDFFFFFF);
 }
 
+const OmbreColor = Container(
+    decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            AppColors.pink,
+            AppColors.blue,
+          ],
+        )
+    )
+);
+
 // ignore: non_constant_identifier_names
 final AppTheme = ThemeData(
   // TODO Add AppTheme
-  final OmbreColor = Container(
-    decoration: BoxDecoration(
-    gradient: LinearGradient(
-    begin: Alignment.topRight,
-    end: Alignment.bottomLeft,
-      colors: [
-      color2,
-      color1,
-      ],
-    )
-  )
-);
+
   // See Flutter theme documentation for details
   // https://flutter.dev/docs/cookbook/design/themes
 );
