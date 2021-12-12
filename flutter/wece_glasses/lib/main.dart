@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'theme.dart';
 import 'constants.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 
 void main() => runApp(const MyApp());
 
@@ -44,17 +45,35 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final flutterBlue = FlutterBlue.instance;
+  List<BluetoothDevice> deviceList = [];
+  BluetoothDevice? connectedDevice;
+  String dropdownValue = 'One';
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  @override
+  void initState() {
+    flutterBlue.startScan();
+    List<BluetoothDevice> temp = [];
+    flutterBlue.connectedDevices
+        .asStream()
+        .listen((List<BluetoothDevice> devices) {
+          for (BluetoothDevice device in devices) {
+            if(!temp.contains(device)) {
+              temp.add(device);
+            }
+          }
     });
+    flutterBlue.scanResults.listen((List<ScanResult> results) {
+      for (ScanResult result in results) {
+        if(!temp.contains(result.device)) {
+          temp.add(result.device);
+        }
+      }
+    });
+    setState(() {
+      deviceList = temp;
+    });
+    super.initState();
   }
 
   @override
@@ -91,21 +110,40 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Text("There are " + deviceList.length.toString() + " devices connected."),
+            DropdownButton(
+              value: connectedDevice,
+              onChanged: (BluetoothDevice? newValue) {
+                setState(() {
+                  connectedDevice = newValue!;
+                });
+              },
+              items: deviceList
+                  .map<DropdownMenuItem<BluetoothDevice>>((BluetoothDevice value) {
+                return DropdownMenuItem<BluetoothDevice>(
+                  value: value,
+                  child: Text(value.name + " " + value.id.toString()),
+                );
+              }).toList(),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            DropdownButton(
+              value: dropdownValue,
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownValue = newValue!;
+                });
+              },
+              items: <String>['One', 'Two', 'Free', 'Four']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
