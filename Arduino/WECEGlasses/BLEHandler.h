@@ -1,3 +1,6 @@
+#ifndef BLEHandler_h // Prevents double import 
+#define BLEHandler_h
+
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
@@ -74,3 +77,5 @@ class BLEHandler {
       pAdvertising->start();
     }
 };
+
+#endif
