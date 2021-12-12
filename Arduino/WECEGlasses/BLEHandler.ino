@@ -71,8 +71,3 @@ class BLEReceive {
       pAdvertising->start();
     }
 };
-
-void setup() {}
-
-void loop() {}
-    
