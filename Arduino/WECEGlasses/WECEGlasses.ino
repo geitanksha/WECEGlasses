@@ -10,6 +10,14 @@ void setup() {
 
   ble.init();
   displayHandler.init();
+
 }
 
-void loop() {}
+void loop() {
+  // Example of how bluetooth reading might work
+  // If bluetooth data available, write data to screen
+  if (ble.dataAvailable()) {
+    displayHandler.writeSimpleString(ble.getData());
+  }
+
+}

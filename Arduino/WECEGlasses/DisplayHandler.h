@@ -24,6 +24,20 @@ class DisplayHandler {
 
     // TODO Add methods for writing information to screen
     
+    void writeSimpleString(String text) {
+      // Very simple example function for writing small text to screen
+      oled.clearDisplay();
+      
+      oled.setTextSize(1);              // Normal 1:1 pixel scale
+      oled.setTextColor(SSD1306_WHITE); // Draw white text
+      oled.setCursor(0,0);              // Start at top-left corner
+      
+      oled.println(text); 
+
+      // Pixels are only drawn to screen once display method is called
+      oled.display();
+    }
+    
     // Constructor
     void init() {
       Serial.println("Initializing display");
@@ -34,17 +48,9 @@ class DisplayHandler {
         for(;;); // Don't proceed, loop forever
       }
       
-      oled.clearDisplay();
-
       // TODO Add startup screen
-      // Here's a basic example
-      oled.setTextSize(1);              // Normal 1:1 pixel scale
-      oled.setTextColor(SSD1306_WHITE); // Draw white text
-      oled.setCursor(0,0);              // Start at top-left corner
-      oled.println("WECE Glasses");
-
-      // Pixels are only drawn to screen once display method is called
-      oled.display(); 
+      // Here's a basic placeholder
+      writeSimpleString("WECE Glasses");
     }
 
     

@@ -13,7 +13,7 @@
 // Entire class definition should't really be in header file, but this is fine for now.
 class BLEHandler {
   private:
-    std::string receivedData;
+    String receivedData;
     bool dataAvail = false;
 
     class Callback: public BLECharacteristicCallbacks {
@@ -24,16 +24,14 @@ class BLEHandler {
         Callback(BLEHandler &outer_) : outer(outer_) {}
  
       void onWrite(BLECharacteristic *pCharacteristic) {
-        std::string value = pCharacteristic->getValue();
+        String value = pCharacteristic->getValue().c_str();
         outer.dataAvail = true;
         outer.receivedData = value;
         
         if (value.length() > 0) {
           Serial.println("*********");
           Serial.print("New value: ");
-          for (int i = 0; i < value.length(); i++)
-            Serial.print(value[i]);
-  
+          Serial.print(value);
           Serial.println();
           Serial.println("*********");
         }
@@ -47,7 +45,7 @@ class BLEHandler {
       return dataAvail;
     }
 
-    std::string getData() {
+    String getData() {
       if (dataAvail) {
         return receivedData;
         dataAvail = false;
