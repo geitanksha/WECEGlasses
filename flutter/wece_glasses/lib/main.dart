@@ -58,51 +58,43 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Row(
-        // Column is also a layout widget. It takes a list of children and
-        // arranges them vertically. By default, it sizes itself to fit its
-        // children horizontally, and tries to be as tall as its parent.
-        //
-        // Invoke "debug painting" (press "p" in the console, choose the
-        // "Toggle Debug Paint" action from the Flutter Inspector in Android
-        // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-        // to see the wireframe for each widget.
-        //
-        // Column has various properties to control how it sizes itself and
-        // how it positions its children. Here we use mainAxisAlignment to
-        // center the children vertically; the main axis here is the vertical
-        // axis because Columns are vertical (the cross axis would be
-        // horizontal).
-        mainAxisAlignment: MainAxisAlignment.center,
+      // Set of widgets will be arranged vertically
+      body: Column(
         children: <Widget>[
-          const Text(
-            'Connected Device: ',
+          // Widgets will be arranged horizontally
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'Connected Device: ',
+              ),
+              DropdownButton<String>(
+                value: _connectedDevice,
+                icon: const Icon(Icons.beach_access),
+                iconSize: 15,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent, // TODO change to theme
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _connectedDevice = newValue!;
+                  });
+                },
+                // This is an example list of items.
+                // We will need to generate this list programmatically
+                items: <String>['', 'Device 1', 'Device 2', 'Device 3', 'Device 4']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ],
           ),
-          DropdownButton<String>(
-            value: _connectedDevice,
-            icon: const Icon(Icons.beach_access),
-            iconSize: 15,
-            elevation: 16,
-            style: const TextStyle(color: Colors.deepPurple),
-            underline: Container(
-              height: 2,
-              color: Colors.deepPurpleAccent,
-            ),
-            onChanged: (String? newValue) {
-              setState(() {
-                _connectedDevice = newValue!;
-              });
-            },
-            // This is an example list of items.
-            // We will need to generate this list programmatically
-            items: <String>['', 'Device 1', 'Device 2', 'Device 3', 'Device 4']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
+          // TODO add screen management buttons
         ],
       ),
     );
