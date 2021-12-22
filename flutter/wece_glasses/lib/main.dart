@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       // The app theme is defined in constants.dart
       title: Constants.appName,
       // The app theme is defined in theme.dart
-      theme: AppTheme,
+      theme: appTheme,
       // This directs the app to start at the screen class called MyHomePage.
       // Currently the main screen is the default from Flutter, but we will
       // edit the screens and screen routes as needed.
@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Container(
-      decoration: OmbreColor,
+      decoration: gradientDecoration,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
