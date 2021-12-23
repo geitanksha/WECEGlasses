@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
+import 'globals.dart';
 
 // Bluetooth connection screen
 
@@ -12,13 +13,10 @@ class BluetoothConnectScreen extends StatefulWidget {
 }
 
 class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
-  final flutterBlue = FlutterBlue.instance;
-  List<BluetoothDevice> deviceList = [];
-  BluetoothDevice? connectedDevice;
-  List<BluetoothService> services = [];
 
   @override
   void initState() {
+    // TODO Fix. Currently does not generate list on app open
     super.initState();
     updateDeviceList();
   }
