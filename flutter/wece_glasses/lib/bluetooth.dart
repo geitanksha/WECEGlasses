@@ -14,12 +14,15 @@ class BluetoothConnectScreen extends StatefulWidget {
 }
 
 class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
+  final flutterBlue = FlutterBlue.instance;
+  List<BluetoothDevice> deviceList = [];
 
   @override
   void initState() {
-    // TODO Fix. Currently does not generate list on app open
     super.initState();
-    updateDeviceList();
+    Future(() {
+      updateDeviceList();
+    });
   }
 
   Future<void> updateDeviceList() async {

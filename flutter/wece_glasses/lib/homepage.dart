@@ -17,15 +17,15 @@ class _HomePageState extends State<HomePage> {
   // Temporary for testing
   final TextEditingController _writeController = TextEditingController();
 
-  void connectDevice() {
+  void connectDevicePrompt() {
     // Show prompt for connecting a device
-    // TODO Need to set state after bottom sheet is popped
     Future<void> future = showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
           return const BluetoothConnectScreen();
         });
-        future.then((void value) => setState(() {}));
+    // When bottom sheet is closed, call setState so main screen updates
+    future.then((void value) => setState(() {}));
   }
 
   void disconnectDevice() {
@@ -40,6 +40,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
@@ -49,8 +50,9 @@ class _HomePageState extends State<HomePage> {
                 ? "Please connect a device"
                 : connectedDevice!.name),
             ElevatedButton(
-              onPressed: connectedDevice == null ? connectDevice: disconnectDevice,
-              child: Text(connectedDevice == null ? "Connect": "Disconnect"),
+              onPressed:
+                  connectedDevice == null ? connectDevicePrompt : disconnectDevice,
+              child: Text(connectedDevice == null ? "Connect" : "Disconnect"),
             ),
             // Temporary
             if (connectedDevice != null)
