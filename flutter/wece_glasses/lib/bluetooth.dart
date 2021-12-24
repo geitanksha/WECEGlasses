@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
 import 'globals.dart';
+import 'dart:convert';
+import 'constants.dart';
 
 // Bluetooth connection screen
 
@@ -92,5 +94,16 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
           ),
       ),
     );
+  }
+}
+
+void bluetoothWrite(List<BluetoothService> services, text) {
+  for (BluetoothService service in services) {
+    for (BluetoothCharacteristic characteristic in service.characteristics) {
+      if (characteristic.uuid.toString() == Constants.uuid) {
+        characteristic.write(utf8.encode(text));
+        return;
+      }
+    }
   }
 }

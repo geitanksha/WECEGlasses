@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:wece_glasses/bluetooth.dart';
 import 'globals.dart';
-import 'dart:convert';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -29,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void disconnectDevice() {
+    // TODO Fix device unavailable after disconnect (until device reset) May be a device code issue.
     setState(() {
       connectedDevice!.disconnect();
       connectedDevice = null;
@@ -77,14 +76,7 @@ class _HomePageState extends State<HomePage> {
                             TextButton(
                               child: Text("Send"),
                               onPressed: () {
-                                for (BluetoothService ser in services) {
-                                  print(ser);
-                                  for (BluetoothCharacteristic char
-                                      in ser.characteristics) {
-                                    char.write(utf8
-                                        .encode(_writeController.value.text));
-                                  }
-                                }
+                                bluetoothWrite(services, _writeController.value.text);
                               },
                             ),
                             TextButton(

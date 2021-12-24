@@ -3,5 +3,5 @@ class Constants {
   static const String appName = "WECEGlasses";
 
   // Defined in microcontroller code
-  static const String uuid = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+  static const String uuid = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 }

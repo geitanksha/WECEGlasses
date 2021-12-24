@@ -20,7 +20,6 @@ class MyApp extends StatelessWidget {
       // Currently the main screen is the default from Flutter, but we will
       // edit the screens and screen routes as needed.
       home: const HomePage(title: Constants.appName),
-      //home: BluetoothConnectScreen(),
     );
   }
 }
