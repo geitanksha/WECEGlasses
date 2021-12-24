@@ -19,16 +19,20 @@ class _HomePageState extends State<HomePage> {
 
   void connectDevice() {
     // Show prompt for connecting a device
-    showModalBottomSheet<void>(
+    // TODO Need to set state after bottom sheet is popped
+    Future<void> future = showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
           return const BluetoothConnectScreen();
         });
+        future.then((void value) => setState(() {}));
   }
 
   void disconnectDevice() {
-    // TODO implement
-    throw UnimplementedError();
+    setState(() {
+      connectedDevice!.disconnect();
+      connectedDevice = null;
+    });
   }
 
   @override
@@ -48,6 +52,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: connectedDevice == null ? connectDevice: disconnectDevice,
               child: Text(connectedDevice == null ? "Connect": "Disconnect"),
             ),
+            // Temporary
             if (connectedDevice != null)
               ElevatedButton(
                 child: Text("Write"),

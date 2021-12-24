@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
 import 'globals.dart';
@@ -22,6 +23,7 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
   }
 
   Future<void> updateDeviceList() async {
+    // TODO Handle exception when scan is already in progress
     await flutterBlue.startScan(timeout: const Duration(seconds: 4));
     List<BluetoothDevice> temp = [];
     flutterBlue.connectedDevices
@@ -46,15 +48,19 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
   }
 
   Future<void> connectDevice(BluetoothDevice device) async {
-    connectedDevice = device;
-
     try {
       await device.connect();
-    } catch (e) {
-      rethrow; // TODO Need to catch already connected error
-    } finally {
-      services = await device.discoverServices();
+    } on PlatformException catch(e) {
+      if (e.code != 'already_connected') {
+        rethrow;
+      }
     }
+
+    connectedDevice = device;
+    services = await device.discoverServices();
+
+    // Exit screen
+    Navigator.pop(context);
   }
 
   @override
