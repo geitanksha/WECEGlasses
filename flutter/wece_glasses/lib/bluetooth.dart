@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
-import 'globals.dart';
 import 'dart:convert';
-import 'constants.dart';
+import 'package:wece_glasses/device_screens/screen_handler.dart';
+import 'package:wece_glasses/globals.dart';
+import 'package:wece_glasses/constants.dart';
+
 
 // Bluetooth connection screen
 
@@ -64,6 +66,8 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
     connectedDevice = device;
     services = await device.discoverServices();
 
+    deviceScreenHandler.start();
+
     // Exit screen
     Navigator.pop(context);
   }
@@ -97,7 +101,9 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
   }
 }
 
-void bluetoothWrite(List<BluetoothService> services, text) {
+
+
+void bluetoothWrite(text) {
   for (BluetoothService service in services) {
     for (BluetoothCharacteristic characteristic in service.characteristics) {
       if (characteristic.uuid.toString() == Constants.uuid) {

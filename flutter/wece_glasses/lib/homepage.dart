@@ -12,9 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // Temporary for testing
-  final TextEditingController _writeController = TextEditingController();
-
   void connectDevicePrompt() {
     // Show prompt for connecting a device
     Future<void> future = showModalBottomSheet<void>(
@@ -29,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   void disconnectDevice() {
     // TODO Fix device unavailable after disconnect (until device reset) May be a device code issue.
     setState(() {
+      deviceScreenHandler.stop();
       connectedDevice!.disconnect();
       connectedDevice = null;
     });
@@ -53,44 +51,14 @@ class _HomePageState extends State<HomePage> {
                   connectedDevice == null ? connectDevicePrompt : disconnectDevice,
               child: Text(connectedDevice == null ? "Connect" : "Disconnect"),
             ),
-            // Temporary
+            // TODO Add rest of user functionality (settings, etc.) here
             if (connectedDevice != null)
+              // Temporary to test screen changes
               ElevatedButton(
-                child: Text("Write"),
-                onPressed: () async {
-                  await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Write"),
-                          content: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  controller: _writeController,
-                                ),
-                              ),
-                            ],
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text("Send"),
-                              onPressed: () {
-                                bluetoothWrite(services, _writeController.value.text);
-                              },
-                            ),
-                            TextButton(
-                              child: Text("Cancel"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        );
-                      });
-                },
+                onPressed: () => deviceScreenHandler.nextScreen(), 
+                child: Text("Next Screen")
               ),
-            // TODO Add rest of settings functionality here
+            
           ],
         ),
       ),
