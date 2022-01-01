@@ -4,7 +4,6 @@
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
-#include <BLE2902.h>
 
 #include <Arduino.h> // For Serial.print()
 
@@ -17,12 +16,15 @@ class BLEHandler {
     BLEServer* pServer = NULL;
     BLECharacteristic* pCharacteristic = NULL;
     BLEAdvertising *pAdvertising = NULL;
+    
     bool deviceConnected = false;
 
-    String receivedData;
-    bool dataAvail = false;
+    bool dataAvailable = false; // Whether data is available
+    String dataReceived; // Actual data that was recieved 
 
+    // Callback class for handling device connect/disconnect
     class ServerCallbacks: public BLEServerCallbacks {
+      // Give class reference to the encapsulating class so we can use its members
       BLEHandler &outer;
       public:
         ServerCallbacks(BLEHandler &outer_) : outer(outer_) {}
@@ -38,34 +40,32 @@ class BLEHandler {
       }
     };
 
-    class Callback: public BLECharacteristicCallbacks {
-      
+    // Callback class for handling incoming data
+    class CharacteristicCallbacks: public BLECharacteristicCallbacks {
       // Give class reference to the encapsulating class so we can use its members
       BLEHandler &outer;
       public:
-        Callback(BLEHandler &outer_) : outer(outer_) {}
+        CharacteristicCallbacks(BLEHandler &outer_) : outer(outer_) {}
  
       void onWrite(BLECharacteristic *pCharacteristic) {
         String value = pCharacteristic->getValue().c_str();
-        outer.dataAvail = true;
-        outer.receivedData = value;
+        outer.dataAvailable = true;
+        outer.dataReceived = value;
       }
     };
 
-    Callback *callback = new Callback(*this);
-    
   public:
-    bool getDeviceConnected() {
+    bool isDeviceConnected() {
       return deviceConnected;
     }
     
-    bool dataAvailable(){
-      return dataAvail;
+    bool isDataAvailable(){
+      return dataAvailable;
     }
 
     String getData() {
-      return receivedData;
-      dataAvail = false;
+      return dataReceived;
+      dataAvailable = false;
     }
 
     void checkConnection() {
@@ -94,7 +94,7 @@ class BLEHandler {
                                  BLECharacteristic::PROPERTY_NOTIFY |
                                  BLECharacteristic::PROPERTY_INDICATE
                                );
-      pCharacteristic->setCallbacks(callback);
+      pCharacteristic->setCallbacks(new CharacteristicCallbacks(*this));
 
       pService->start();
       
