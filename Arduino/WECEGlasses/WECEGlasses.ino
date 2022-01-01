@@ -14,6 +14,9 @@ void setup() {
 }
 
 void loop() {
+  ble.checkConnection();
+  
+  
   // Example of how bluetooth reading might work
   // If bluetooth data available, write data to screen
   if (ble.dataAvailable()) {

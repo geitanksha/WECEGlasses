@@ -4,6 +4,7 @@
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
+#include <BLE2902.h>
 
 #include <Arduino.h> // For Serial.print()
 
@@ -13,8 +14,29 @@
 // Entire class definition should't really be in header file, but this is fine for now.
 class BLEHandler {
   private:
+    BLEServer* pServer = NULL;
+    BLECharacteristic* pCharacteristic = NULL;
+    BLEAdvertising *pAdvertising = NULL;
+    bool deviceConnected = false;
+
     String receivedData;
     bool dataAvail = false;
+
+    class ServerCallbacks: public BLEServerCallbacks {
+      BLEHandler &outer;
+      public:
+        ServerCallbacks(BLEHandler &outer_) : outer(outer_) {}
+      
+      void onConnect(BLEServer* pServer) {
+        outer.deviceConnected = true;
+        Serial.println("Device Connected");
+      };
+  
+      void onDisconnect(BLEServer* pServer) {
+        outer.deviceConnected = false;
+        Serial.println("Device Disconnected");
+      }
+    };
 
     class Callback: public BLECharacteristicCallbacks {
       
@@ -27,52 +49,57 @@ class BLEHandler {
         String value = pCharacteristic->getValue().c_str();
         outer.dataAvail = true;
         outer.receivedData = value;
-        
-        if (value.length() > 0) {
-          Serial.println("*********");
-          Serial.print("New value: ");
-          Serial.print(value);
-          Serial.println();
-          Serial.println("*********");
-        }
       }
     };
 
     Callback *callback = new Callback(*this);
     
   public:
+    bool getDeviceConnected() {
+      return deviceConnected;
+    }
+    
     bool dataAvailable(){
       return dataAvail;
     }
 
     String getData() {
-      if (dataAvail) {
-        return receivedData;
-        dataAvail = false;
-      } else {
-        // throw error?
+      return receivedData;
+      dataAvail = false;
+    }
+
+    void checkConnection() {
+      if(!deviceConnected) {
+        delay(500); // Give the bluetooth stack the chance to get things ready
+        pAdvertising->start(); 
+        Serial.println("Started Advertising");
       }
     }
 
     void init() {
+      // Create device
       BLEDevice::init("WECEGlasses"); // Name of device
-      BLEServer *pServer = BLEDevice::createServer();
-    
+
+      // Create server
+      pServer = BLEDevice::createServer();
+      pServer->setCallbacks(new ServerCallbacks(*this));
+
+      // Create service
       BLEService *pService = pServer->createService(SERVICE_UUID);
     
-      BLECharacteristic *pCharacteristic = pService->createCharacteristic(
-                                             CHARACTERISTIC_UUID,
-                                             BLECharacteristic::PROPERTY_READ |
-                                             BLECharacteristic::PROPERTY_WRITE
-                                           );
-
+      pCharacteristic = pService->createCharacteristic(
+                                 CHARACTERISTIC_UUID,
+                                 BLECharacteristic::PROPERTY_READ |
+                                 BLECharacteristic::PROPERTY_WRITE |
+                                 BLECharacteristic::PROPERTY_NOTIFY |
+                                 BLECharacteristic::PROPERTY_INDICATE
+                               );
       pCharacteristic->setCallbacks(callback);
-    
-      pCharacteristic->setValue("Hello World");
+
       pService->start();
-    
-      BLEAdvertising *pAdvertising = pServer->getAdvertising();
-      pAdvertising->start();
+      
+      pAdvertising = pServer->getAdvertising();
+      // Will start advertising in loop
     }
 };
 
