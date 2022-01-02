@@ -75,6 +75,11 @@ class BLEHandler {
       dataAvailable = false;
     }
 
+    void notify(String s) {
+      pCharacteristic->setValue(s.c_str());
+      pCharacteristic->notify();
+    }
+
     void init() {
       // Create device
       BLEDevice::init("WECEGlasses"); // Name of device
