@@ -22,6 +22,12 @@ class BLEHandler {
     bool dataAvailable = false; // Whether data is available
     String dataReceived; // Actual data that was recieved 
 
+    void startAdvertising() {
+        delay(500); // Give the bluetooth stack the chance to get things ready
+        pAdvertising->start(); 
+        Serial.println("Started Advertising");
+    }
+
     // Callback class for handling device connect/disconnect
     class ServerCallbacks: public BLEServerCallbacks {
       // Give class reference to the encapsulating class so we can use its members
@@ -37,6 +43,7 @@ class BLEHandler {
       void onDisconnect(BLEServer* pServer) {
         outer.deviceConnected = false;
         Serial.println("Device Disconnected");
+        outer.startAdvertising(); // Restart advertising
       }
     };
 
@@ -68,14 +75,6 @@ class BLEHandler {
       dataAvailable = false;
     }
 
-    void checkConnection() {
-      if(!deviceConnected) {
-        delay(500); // Give the bluetooth stack the chance to get things ready
-        pAdvertising->start(); 
-        Serial.println("Started Advertising");
-      }
-    }
-
     void init() {
       // Create device
       BLEDevice::init("WECEGlasses"); // Name of device
@@ -99,7 +98,7 @@ class BLEHandler {
       pService->start();
       
       pAdvertising = pServer->getAdvertising();
-      // Will start advertising in loop
+      startAdvertising();
     }
 };
 
