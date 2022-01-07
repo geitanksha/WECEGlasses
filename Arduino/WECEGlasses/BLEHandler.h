@@ -4,6 +4,7 @@
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
+#include <BLE2902.h>
 
 #include <Arduino.h> // For Serial.print()
 
@@ -100,9 +101,15 @@ class BLEHandler {
                                );
       pCharacteristic->setCallbacks(new CharacteristicCallbacks(*this));
 
+      // Create a BLE Descriptor
+      pCharacteristic->addDescriptor(new BLE2902());
+  
       pService->start();
       
       pAdvertising = pServer->getAdvertising();
+      pAdvertising->addServiceUUID(SERVICE_UUID);
+      pAdvertising->setScanResponse(false);
+      pAdvertising->setMinPreferred(0x0);
       startAdvertising();
     }
 };

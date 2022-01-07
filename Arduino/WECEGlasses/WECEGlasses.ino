@@ -7,6 +7,8 @@ BLEHandler ble;
 DisplayHandler displayHandler;
 ButtonHandler button;
 
+uint32_t val = 0; // Temporary for debugging
+
 void setup() {
   Serial.begin(115200); // Printing for debugging/logging
 
@@ -25,6 +27,7 @@ void loop() {
   // Process button clicks
   if(button.readState() == 1) {
     Serial.println("Button click detected.");
-    ble.notify("1");
+    //ble.notify("1");
+    ble.notify(String(val++)); // TODO remove - temporary for debugging
   }
 }
