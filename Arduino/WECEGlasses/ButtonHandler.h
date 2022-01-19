@@ -2,9 +2,8 @@
 #ifndef ButtonHandler_h
 #define ButtonHandler_h
 
-// Pin that button is connected to.
-// TODO pin 0 is the onboard button--this will change once external button added
-#define BUTTON_PIN 0
+// Pin that (external) button is connected to.
+#define BUTTON_PIN 13
 
 class ButtonHandler {
   private:
@@ -17,8 +16,7 @@ class ButtonHandler {
     int readState() {
       int ret = 0; // Default no press read
       
-      // TODO remove logical not -- onboard push button has opposite state readings
-      currentState = !digitalRead(BUTTON_PIN);
+      currentState = digitalRead(BUTTON_PIN);
 
       if(lastState == HIGH && currentState == LOW) {
         // Button was released (That is, pressed then released)
