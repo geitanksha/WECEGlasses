@@ -24,7 +24,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void disconnectDevice() {
-    // TODO Fix device unavailable after disconnect (until device reset) May be a device code issue.
     setState(() {
       deviceScreenHandler.stop();
       connectedDevice!.disconnect();
@@ -52,13 +51,7 @@ class _HomePageState extends State<HomePage> {
               child: Text(connectedDevice == null ? "Connect" : "Disconnect"),
             ),
             // TODO Add rest of user functionality (settings, etc.) here
-            if (connectedDevice != null)
-              // Temporary to test screen changes
-              ElevatedButton(
-                onPressed: () => deviceScreenHandler.nextScreen(), 
-                child: Text("Next Screen")
-              ),
-            
+            //if (connectedDevice != null)
           ],
         ),
       ),

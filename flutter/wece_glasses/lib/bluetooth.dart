@@ -68,6 +68,8 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
 
     deviceScreenHandler.start();
 
+    readNotifications();
+    
     // Exit screen
     Navigator.pop(context);
   }
@@ -102,13 +104,28 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
 }
 
 
-
 void bluetoothWrite(text) {
   for (BluetoothService service in services) {
     for (BluetoothCharacteristic characteristic in service.characteristics) {
       if (characteristic.uuid.toString() == Constants.uuid) {
         characteristic.write(utf8.encode(text));
         return;
+      }
+    }
+  }
+}
+
+void readNotifications() async {
+  for (BluetoothService service in services) {
+    for (BluetoothCharacteristic characteristic in service.characteristics) {
+      if(characteristic.properties.notify) {
+        // TODO Figure out how to destroy correctly
+        await characteristic.setNotifyValue(true);
+        characteristic.value.listen((value) {
+          // Currently moves to next screen on any input
+          deviceScreenHandler.nextScreen();
+        });
+        await Future.delayed(const Duration(milliseconds: 500));
       }
     }
   }
