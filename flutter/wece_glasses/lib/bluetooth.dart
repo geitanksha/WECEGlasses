@@ -120,11 +120,12 @@ void readNotifications() async {
     for (BluetoothCharacteristic characteristic in service.characteristics) {
       if(characteristic.properties.notify) {
         // TODO Figure out how to destroy correctly
-        await characteristic.setNotifyValue(true);
+        // TODO make sure this works consistently (I don't think it does right now)
         characteristic.value.listen((value) {
           // Currently moves to next screen on any input
           deviceScreenHandler.nextScreen();
         });
+        await characteristic.setNotifyValue(true);
         await Future.delayed(const Duration(milliseconds: 500));
       }
     }
