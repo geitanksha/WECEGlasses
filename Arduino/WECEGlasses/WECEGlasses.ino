@@ -30,7 +30,7 @@ void loop() {
     Serial.println("short press detected.");
     //ble.notify("1");
     ble.notify(String(val++)); // TODO remove - temporary for debugging
-  } else{
+  } if(state == 2){
     Serial.println("long press detected. ");
   }
 }
