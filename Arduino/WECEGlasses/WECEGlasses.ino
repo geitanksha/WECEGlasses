@@ -25,9 +25,12 @@ void loop() {
   }
 
   // Process button clicks
-  if(button.readState() == 1) {
-    Serial.println("Button click detected.");
+  int state= button.readState();
+  if(state == 1) {
+    Serial.println("short press detected.");
     //ble.notify("1");
     ble.notify(String(val++)); // TODO remove - temporary for debugging
+  } else{
+    Serial.println("long press detected. ");
   }
 }
