@@ -16,24 +16,4 @@ class button_screen extends DeviceScreen {
   void stopScreen() {
 
   }
-  ToggleButtons(
-      children: <Widget>[
-        Icon(Icons.ac_unit),
-        Icon(Icons.call),
-        Icon(Icons.cake),
-    ],
-    onPressed: (int index) {
-      int count = 0;
-      isSelected.forEach((bool val) {
-            if (val) count++;
-            });
 
-            if (isSelected[index] && count < 2)
-             return;
-
-            setState(() {
-              isSelected[index] = !isSelected[index];
-        });
-      },
-      isSelected: isSelected,
-    ),

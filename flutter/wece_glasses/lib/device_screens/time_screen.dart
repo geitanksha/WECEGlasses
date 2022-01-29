@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wece_glasses/device_screens/screen_handler.dart';
 import 'package:wece_glasses/bluetooth.dart';
@@ -14,8 +15,13 @@ class TimeScreen extends DeviceScreen {
   @override
   void stopScreen() {
     _timer!.cancel();
-  }
 
+  }
+  @override
+    Icon getIcon() {
+      return Icon(Icons.access_time);
+  }
+}
   void _getTime() {
     final DateTime now = DateTime.now();
     final String _timeString = _formatDateTime(now);

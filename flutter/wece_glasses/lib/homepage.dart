@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wece_glasses/bluetooth.dart';
 import 'globals.dart';
+import 'package:wece_glasses/device_screens/screen_handler.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -31,6 +32,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  loopElements() {
+    List<Icon> allIcons = [];
+    for (int i = 0; i < deviceScreenHandler.screens.length; i++) {
+      allIcons.add(deviceScreenHandler.screens[i].getIcon());
+    }
+    return allIcons;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +65,30 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () => deviceScreenHandler.nextScreen(),
                   child: Text("Next Screen")
               ),
+              ToggleButtons(
+
+                children: loopElements(),
+                 isSelected: deviceScreenHandler.displayScreenOn,
+                    onPressed: (int index) {
+
+                      int count = 0;
+                      deviceScreenHandler.displayScreenOn.forEach((bool val) {
+                        if (val) count++;
+                        });
+
+                        if (deviceScreenHandler.displayScreenOn[index] && count < 2)
+                        return;
+
+                        setState(() {
+                            deviceScreenHandler.displayScreenOn[index] = !deviceScreenHandler.displayScreenOn[index];
+                        }); //setState
+                      },
+
+              ),
+
+            }
           ],
+
         ),
       ),
     );
