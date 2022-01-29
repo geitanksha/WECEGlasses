@@ -19,7 +19,7 @@ class Weather {
 
 Future<Weather> fetchWeather() async {
   final response = await http
-      .get(Uri.parse('https://api.weather.gov/gridpoints/TOP/40,88/forecast'));
+      .get(Uri.parse('https://api.weather.gov/gridpoints/TOP/40,-88/forecast'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -27,6 +27,7 @@ Future<Weather> fetchWeather() async {
     print("cloud clicked");
     Weather weather =  Weather.fromJson(jsonDecode(response.body));
     print(weather.temperature);
+    print(weather.detailedForecast);
     return weather;
   } else {
     // If the server did not return a 200 OK response,
