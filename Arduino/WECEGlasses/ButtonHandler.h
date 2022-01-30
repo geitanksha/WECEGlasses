@@ -13,6 +13,8 @@ class ButtonHandler {
     unsigned long releasedTime=0;
     const int SHORT_PRESS_TIME=1500;
     const int LONG_PRESS_TIME=1500;
+    int clicks;
+    const int time_btwn = 500;
      
     
   public:
@@ -26,9 +28,15 @@ class ButtonHandler {
         // Button was released (That is, pressed then released)
         releasedTime=millis();
         long pressDuration=releasedTime-pressedTime;
-        if (pressDuration<SHORT_PRESS_TIME)
+        // TODO NEED TO ADD pressedTime - releasedTime < time_btwn 
+        if(clicks == 1 && pressDuration <SHORT_PRESS_TIME){   
+          ret = 3; //double click detected   
+          clicks = 0;
+        }
+        if (clicks == 0 && pressDuration<SHORT_PRESS_TIME){
           ret=1; //short press detected
-
+          clicks = 1;
+        }
         if( pressDuration > LONG_PRESS_TIME )
           ret=2;  //long press detected
       }
@@ -36,7 +44,6 @@ class ButtonHandler {
          pressedTime= millis();
       }
          
-
       lastState = currentState;
       return ret;
     }

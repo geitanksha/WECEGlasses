@@ -33,4 +33,7 @@ void loop() {
   } if(state == 2){
     Serial.println("long press detected. ");
   }
+   if(state == 3){
+    Serial.println("double press detected. ");
+  }
 }
