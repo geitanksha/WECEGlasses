@@ -26,8 +26,7 @@ class _HomePageState extends State<HomePage> {
   void disconnectDevice() {
     setState(() {
       deviceScreenHandler.stop();
-      connectedDevice!.disconnect();
-      connectedDevice = null;
+      bleHandler.disconnect();
     });
   }
 
