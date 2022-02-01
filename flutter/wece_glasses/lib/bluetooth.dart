@@ -30,8 +30,16 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
   }
 
   Future<void> updateDeviceList() async {
-    // TODO Handle exception when scan is already in progress
-    await flutterBlue.startScan(timeout: const Duration(seconds: 4));
+    try {
+      await flutterBlue.startScan(timeout: const Duration(seconds: 4));
+    } on Exception catch(e) {
+      if(e.toString() == "Exception: Another scan is already in progress.") {
+        return;
+      } else {
+        rethrow;
+      }
+    }
+    
     List<BluetoothDevice> temp = [];
     flutterBlue.connectedDevices
         .asStream()
@@ -68,6 +76,7 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
 
     deviceScreenHandler.start();
 
+    // Start waiting for notifications
     readNotifications();
     
     // Exit screen
