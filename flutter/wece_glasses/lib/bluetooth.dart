@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:wece_glasses/device_screens/screen_handler.dart';
 import 'package:wece_glasses/globals.dart';
 import 'package:wece_glasses/constants.dart';
 
@@ -65,6 +63,7 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
   }
 
   Future<void> connectDevice(BluetoothDevice device) async {
+    // TODO Add handling for device side disconnect
     try {
       await device.connect();
     } on PlatformException catch(e) {
@@ -133,17 +132,13 @@ class BLEHandler {
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
         if(characteristic.properties.notify) {
-          // TODO Figure out how to destroy correctly
-          // TODO make sure this works consistently (I don't think it does right now)
           await characteristic.setNotifyValue(true);
           notificationSubscription = characteristic.value.listen((value) async {
-            print(value.toString());
             // Currently moves to next screen on any input
             deviceScreenHandler.nextScreen();
-
-            return;
           });
           await Future.delayed(const Duration(milliseconds: 500));
+          return;
         }
       }
     }
