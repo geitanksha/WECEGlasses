@@ -12,7 +12,7 @@ class EmptyScreen extends DeviceScreen {
   void stopScreen() {}
 
   @override
-  Icons getIcon() {
-    return Icon(Icons.beach_access);;
+  Icon getIcon() {
+    return Icon(Icons.beach_access);
   }
 }
