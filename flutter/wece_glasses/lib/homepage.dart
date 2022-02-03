@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
     }
     return allIcons;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,41 +49,43 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(connectedDevice == null
-                ? "Please connect a device"
-                : connectedDevice!.name),
-            ElevatedButton(
-              onPressed:
-                  connectedDevice == null ? connectDevicePrompt : disconnectDevice,
-              child: Text(connectedDevice == null ? "Connect" : "Disconnect"),
-            ),
-            // TODO Add rest of user functionality (settings, etc.) here
-            if (connectedDevice != null)
-            // Temporary to test screen changes
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(connectedDevice == null
+                  ? "Please connect a device"
+                  : connectedDevice!.name),
               ElevatedButton(
-                  onPressed: () => deviceScreenHandler.nextScreen(),
-                  child: Text("Next Screen")
+                onPressed:
+                connectedDevice == null
+                    ? connectDevicePrompt
+                    : disconnectDevice,
+                child: Text(connectedDevice == null ? "Connect" : "Disconnect"),
               ),
+              // TODO Add rest of user functionality (settings, etc.) here
+              if (connectedDevice != null)
+              // Temporary to test screen changes
+                ElevatedButton(
+                    onPressed: () => deviceScreenHandler.nextScreen(),
+                    child: Text("Next Screen")
+                ),
               ToggleButtons(
 
                 children: loopElements(),
-                 isSelected: deviceScreenHandler.displayScreenOn,
-                    onPressed: (int index) {
+                isSelected: deviceScreenHandler.displayScreenOn,
+                onPressed: (int index) {
+                  int count = 0;
+                  deviceScreenHandler.displayScreenOn.forEach((bool val) {
+                    if (val) count++;
+                  });
 
-                      int count = 0;
-                      deviceScreenHandler.displayScreenOn.forEach((bool val) {
-                        if (val) count++;
-                        });
+                  if (deviceScreenHandler.displayScreenOn[index] && count < 2)
+                    return;
 
-                        if (deviceScreenHandler.displayScreenOn[index] && count < 2)
-                        return;
-
-                        setState(() {
-                            deviceScreenHandler.displayScreenOn[index] = !deviceScreenHandler.displayScreenOn[index];
-                        }); //setState
-                      },
+                  setState(() {
+                    deviceScreenHandler.displayScreenOn[index] =
+                    !deviceScreenHandler.displayScreenOn[index];
+                  }); //setState
+                },
 
               ),
 
@@ -91,6 +94,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-    }
-
+  }
+}
 
