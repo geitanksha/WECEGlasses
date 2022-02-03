@@ -21,7 +21,7 @@ class TimeScreen extends DeviceScreen {
     Icon getIcon() {
       return Icon(Icons.access_time);
   }
-}
+
   void _getTime() {
     final DateTime now = DateTime.now();
     final String _timeString = _formatDateTime(now);

@@ -13,6 +13,6 @@ class EmptyScreen extends DeviceScreen {
 
   @override
   Icons getIcon() {
-    return ;
+    return Icon(Icons.beach_access);;
   }
 }
