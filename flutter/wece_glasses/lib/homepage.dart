@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wece_glasses/bluetooth.dart';
 import 'globals.dart';
-import 'package:wece_glasses/device_screens/screen_handler.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -55,45 +54,41 @@ class _HomePageState extends State<HomePage> {
                   ? "Please connect a device"
                   : connectedDevice!.name),
               ElevatedButton(
-                onPressed:
-                connectedDevice == null
+                onPressed: connectedDevice == null
                     ? connectDevicePrompt
                     : disconnectDevice,
                 child: Text(connectedDevice == null ? "Connect" : "Disconnect"),
               ),
-              // TODO Add rest of user functionality (settings, etc.) here
               if (connectedDevice != null)
-              // Temporary to test screen changes
+                // Temporary to test screen changes
                 ElevatedButton(
                     onPressed: () => deviceScreenHandler.nextScreen(),
-                    child: Text("Next Screen")
+                    child: const Text("Next Screen")),
+              if (connectedDevice != null)
+                ToggleButtons(
+                  children: loopElements(),
+                  isSelected: deviceScreenHandler.displayScreenOn,
+                  onPressed: (int index) {
+                    int count = 0;
+                    for (var val in deviceScreenHandler.displayScreenOn) {
+                      if (val) count++;
+                    }
+
+                    // At least one screen should be selected at all times
+                    if (deviceScreenHandler.displayScreenOn[index] && count < 2) {
+                      return;
+                    }
+
+                    // Note that if the current screen is deselected,
+                    // it will only take effect once user moves to next screen
+                    setState(() {
+                      deviceScreenHandler.displayScreenOn[index] =
+                          !deviceScreenHandler.displayScreenOn[index];
+                    }); //setState
+                  },
                 ),
-              ToggleButtons(
-
-                children: loopElements(),
-                isSelected: deviceScreenHandler.displayScreenOn,
-                onPressed: (int index) {
-                  int count = 0;
-                  deviceScreenHandler.displayScreenOn.forEach((bool val) {
-                    if (val) count++;
-                  });
-
-                  if (deviceScreenHandler.displayScreenOn[index] && count < 2)
-                    return;
-
-                  setState(() {
-                    deviceScreenHandler.displayScreenOn[index] =
-                    !deviceScreenHandler.displayScreenOn[index];
-                  }); //setState
-                },
-
-              ),
-
-            ]
-
-        ),
+            ]),
       ),
     );
   }
 }
-
