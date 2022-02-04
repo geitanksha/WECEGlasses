@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wece_glasses/bluetooth.dart';
 import 'globals.dart';
+import 'bluetooth_handler.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -12,6 +13,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  @override
+  void initState() {
+    super.initState();
+    bleHandler = BLEHandler(setStateCallback);
+  }
+
+  void setStateCallback() {
+    setState((){});
+  }
+
   void connectDevicePrompt() {
     // Show prompt for connecting a device
     Future<void> future = showModalBottomSheet<void>(
@@ -20,7 +32,7 @@ class _HomePageState extends State<HomePage> {
           return const BluetoothConnectScreen();
         });
     // When bottom sheet is closed, call setState so main screen updates
-    future.then((void value) => setState(() {}));
+    // future.then((void value) => setState(() {}));
   }
 
   void disconnectDevice() {
@@ -41,16 +53,16 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(connectedDevice == null
+            Text(bleHandler.connectedDevice == null
                 ? "Please connect a device"
-                : connectedDevice!.name),
+                : bleHandler.connectedDevice!.name),
             ElevatedButton(
               onPressed:
-                  connectedDevice == null ? connectDevicePrompt : disconnectDevice,
-              child: Text(connectedDevice == null ? "Connect" : "Disconnect"),
+                  bleHandler.connectedDevice == null ? connectDevicePrompt : disconnectDevice,
+              child: Text(bleHandler.connectedDevice == null ? "Connect" : "Disconnect"),
             ),
             // TODO Add rest of user functionality (settings, etc.) here
-            if (connectedDevice != null)
+            if (bleHandler.connectedDevice != null)
             // Temporary to test screen changes
               ElevatedButton(
                   onPressed: () => deviceScreenHandler.nextScreen(),

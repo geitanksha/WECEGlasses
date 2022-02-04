@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:wece_glasses/device_screens/screen_handler.dart';
-import 'package:wece_glasses/bluetooth.dart';
+import 'package:wece_glasses/globals.dart';
+
 
 class TimeScreen extends DeviceScreen {
   Timer? _timer;
@@ -19,7 +20,7 @@ class TimeScreen extends DeviceScreen {
   void _getTime() {
     final DateTime now = DateTime.now();
     final String _timeString = _formatDateTime(now);
-    bluetoothWrite(_timeString);
+    bleHandler.bluetoothWrite(_timeString);
   }
 
   String _formatDateTime(DateTime dateTime) {
