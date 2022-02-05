@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wece_glasses/bluetooth.dart';
+import 'package:wece_glasses/theme.dart';
 import 'globals.dart';
 import 'bluetooth_handler.dart';
 
@@ -13,7 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     super.initState();
@@ -21,17 +21,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   void setStateCallback() {
-    setState((){});
+    setState(() {});
   }
 
   void connectDevicePrompt() {
     // Show prompt for connecting a device
     showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return const BluetoothConnectScreen();
-      }
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return const BluetoothConnectScreen();
+        });
   }
 
   void disconnectDevice() {
@@ -43,32 +42,38 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(bleHandler.connectedDevice == null
-                ? "Please connect a device"
-                : bleHandler.connectedDevice!.name),
-            ElevatedButton(
-              onPressed:
-                  bleHandler.connectedDevice == null ? connectDevicePrompt : disconnectDevice,
-              child: Text(bleHandler.connectedDevice == null ? "Connect" : "Disconnect"),
-            ),
-            // TODO Add rest of user functionality (settings, etc.) here
-            if (bleHandler.connectedDevice != null)
-            // Temporary to test screen changes
-              ElevatedButton(
-                  onPressed: () => deviceScreenHandler.nextScreen(),
-                  child: const Text("Next Screen")
-              ),
-          ],
+    return Container(
+      decoration: gradientDecoration,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text(widget.title),
+          centerTitle: true,
         ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(bleHandler.connectedDevice == null
+                  ? "Please connect a device"
+                  : bleHandler.connectedDevice!.name),
+              ElevatedButton(
+                onPressed: bleHandler.connectedDevice == null
+                    ? connectDevicePrompt
+                    : disconnectDevice,
+                child: Text(bleHandler.connectedDevice == null
+                    ? "Connect"
+                    : "Disconnect"),
+              ),
+              // TODO Add rest of user functionality (settings, etc.) here
+              if (bleHandler.connectedDevice != null)
+                // Temporary to test screen changes
+                ElevatedButton(
+                    onPressed: () => deviceScreenHandler.nextScreen(),
+                    child: const Text("Next Screen")),
+            ],
+          ),
+        )
       ),
     );
   }
