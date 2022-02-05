@@ -5,7 +5,6 @@ import 'package:wece_glasses/globals.dart';
 import 'dart:convert';
 import 'package:wece_glasses/constants.dart';
 
-
 class BLEHandler {
   late StreamSubscription notificationSubscription;
   late StreamSubscription connectionStateSubscription;
@@ -17,14 +16,27 @@ class BLEHandler {
   BLEHandler(this.setState);
 
   Future<void> connect(BluetoothDevice device) async {
-    // TODO Add handling for device side disconnect
     try {
       await device.connect();
     } on PlatformException catch(e) {
-      if (e.code != 'already_connected') {
+      if (e.code == 'already_connected') {
+        // We really shouldn't end up here
+        return;
+      } else {
         rethrow;
       }
     }
+
+    // Listen for (externally initiated) device disconnect and update UI accordingly
+    connectionStateSubscription = device.state.listen((s) {
+      if(s == BluetoothDeviceState.disconnected) {
+        // Accessing the deviceScreenHandler here is a little awkward, but it gets the job done
+        // Equivalent to disconnectDevice in homepage.dart
+        deviceScreenHandler.stop();
+        disconnect(); // Cancel subscription streams
+        setState(); // Update UI
+      }
+    });
 
     connectedDevice = device;
     setState();
@@ -62,6 +74,7 @@ class BLEHandler {
 
   void disconnect() {
     notificationSubscription.cancel();
+    connectionStateSubscription.cancel();
     if(connectedDevice != null) {
       connectedDevice!.disconnect();
       connectedDevice = null;

@@ -26,13 +26,12 @@ class _HomePageState extends State<HomePage> {
 
   void connectDevicePrompt() {
     // Show prompt for connecting a device
-    Future<void> future = showModalBottomSheet<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return const BluetoothConnectScreen();
-        });
-    // When bottom sheet is closed, call setState so main screen updates
-    // future.then((void value) => setState(() {}));
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return const BluetoothConnectScreen();
+      }
+    );
   }
 
   void disconnectDevice() {
@@ -66,7 +65,7 @@ class _HomePageState extends State<HomePage> {
             // Temporary to test screen changes
               ElevatedButton(
                   onPressed: () => deviceScreenHandler.nextScreen(),
-                  child: Text("Next Screen")
+                  child: const Text("Next Screen")
               ),
           ],
         ),
