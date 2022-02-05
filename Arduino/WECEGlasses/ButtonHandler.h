@@ -27,23 +27,34 @@ class ButtonHandler {
       if(lastState == HIGH && currentState == LOW){ 
         // Button was released (That is, pressed then released)
         releasedTime=millis();
-        long pressDuration=releasedTime-pressedTime;
+        
+        long pressDuration = releasedTime - pressedTime;
         // TODO NEED TO ADD pressedTime - releasedTime < time_btwn 
-        if(clicks == 1 && pressDuration <SHORT_PRESS_TIME){   
-          ret = 3; //double click detected   
-          clicks = 0;
+        long btwnDuration = pressedTime - releasedTime;
+        long timeLimit = releasedTime + 1000
+
+        while(timePassed < timeLimit){
+          currentTime = millis();
+          if(currentTime < timeLimit){
+            //
+          }
         }
         if (clicks == 0 && pressDuration<SHORT_PRESS_TIME){
           ret=1; //short press detected
           clicks = 1;
+          if(clicks == 1 && pressDuration <SHORT_PRESS_TIME && btwnDuration < time_btwn){   
+            ret = 3; //double click detected   
+            clicks = 0;
+          }
         }
-        if( pressDuration > LONG_PRESS_TIME )
+        
+        
+        if(pressDuration > LONG_PRESS_TIME)
           ret=2;  //long press detected
-      }
-      else if(lastState==LOW && currentState== HIGH){ 
-         pressedTime= millis();
-      }
-         
+        else if(lastState==LOW && currentState== HIGH){ 
+           pressedTime= millis();
+        }
+      } 
       lastState = currentState;
       return ret;
     }
