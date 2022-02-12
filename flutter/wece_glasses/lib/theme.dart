@@ -7,21 +7,36 @@ import 'package:flutter/material.dart';
  */
 
 class AppColors {
-  /*
-   Here are WECE's theme colors for 2021-2022 courtesy of marketing.
-   We don't necessarily have to use these colors, but if we do they should be
-   renamed appropriately. Leaving them here for reference.
-  */
   // Flutter colors are RGB color codes prefixed with an opacity value.
   // The FF represents full opacity
-  static const color1 = Color(0xFF2A5236);
-  static const color2 = Color(0xFFF7E7CE);
-  static const color3 = Color(0xFFE6ABB5);
+  static const darkBlue = Color(0xFF022B3A);
+  static const lightBlue = Color(0xFFB2BEC1);
+  static const pink = Color(0xFFC75E61);
+  static const red = Color(0xFF8F2220);
+  static const green = Color(0xFF78C178);
+  static const white = Color(0xFDFFFFFF);
 }
 
-// ignore: non_constant_identifier_names
-final AppTheme = ThemeData(
-  // TODO Add AppTheme
-  // See Flutter theme documentation for details
-  // https://flutter.dev/docs/cookbook/design/themes
+ColorScheme colorScheme = const ColorScheme.dark(
+  primary: AppColors.pink,
+  primaryVariant: AppColors.red,
+  secondary: AppColors.green,
+  secondaryVariant: AppColors.green,
+  surface: AppColors.darkBlue,
+  background: AppColors.darkBlue,
+);
+final appTheme = ThemeData.from(
+    colorScheme: colorScheme
+);
+
+// Gradient for home screen background
+const gradientDecoration = BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        AppColors.pink,
+        AppColors.darkBlue,
+      ],
+    ),
 );

@@ -1,15 +1,10 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:wece_glasses/device_screens/screen_handler.dart';
 import 'package:wece_glasses/globals.dart';
-import 'package:wece_glasses/constants.dart';
-
 
 // Bluetooth connection screen
-
 class BluetoothConnectScreen extends StatefulWidget {
   const BluetoothConnectScreen({Key? key}) : super(key: key);
 
@@ -30,8 +25,16 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
   }
 
   Future<void> updateDeviceList() async {
-    // TODO Handle exception when scan is already in progress
-    await flutterBlue.startScan(timeout: const Duration(seconds: 4));
+    try {
+      await flutterBlue.startScan(timeout: const Duration(seconds: 4));
+    } on Exception catch(e) {
+      if(e.toString() == "Exception: Another scan is already in progress.") {
+        return;
+      } else {
+        rethrow;
+      }
+    }
+    
     List<BluetoothDevice> temp = [];
     flutterBlue.connectedDevices
         .asStream()
@@ -55,20 +58,11 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
   }
 
   Future<void> connectDevice(BluetoothDevice device) async {
-    try {
-      await device.connect();
-    } on PlatformException catch(e) {
-      if (e.code != 'already_connected') {
-        rethrow;
-      }
-    }
-
-    connectedDevice = device;
-    services = await device.discoverServices();
-
+    await bleHandler.connect(device);
     deviceScreenHandler.start();
 
-    readNotifications();
+    // Start waiting for notifications
+    bleHandler.subscribeNotifications();
     
     // Exit screen
     Navigator.pop(context);
@@ -104,30 +98,3 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
 }
 
 
-void bluetoothWrite(text) {
-  for (BluetoothService service in services) {
-    for (BluetoothCharacteristic characteristic in service.characteristics) {
-      if (characteristic.uuid.toString() == Constants.uuid) {
-        characteristic.write(utf8.encode(text));
-        return;
-      }
-    }
-  }
-}
-
-void readNotifications() async {
-  for (BluetoothService service in services) {
-    for (BluetoothCharacteristic characteristic in service.characteristics) {
-      if(characteristic.properties.notify) {
-        // TODO Figure out how to destroy correctly
-        // TODO make sure this works consistently (I don't think it does right now)
-        characteristic.value.listen((value) {
-          // Currently moves to next screen on any input
-          deviceScreenHandler.nextScreen();
-        });
-        await characteristic.setNotifyValue(true);
-        await Future.delayed(const Duration(milliseconds: 500));
-      }
-    }
-  }
-}

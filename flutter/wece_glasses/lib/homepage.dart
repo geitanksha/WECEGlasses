@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wece_glasses/bluetooth.dart';
+import 'package:wece_glasses/theme.dart';
 import 'globals.dart';
 import 'theme.dart';
+import 'bluetooth_handler.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -13,22 +15,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    bleHandler = BLEHandler(setStateCallback);
+  }
+
+  void setStateCallback() {
+    setState(() {});
+  }
+
   void connectDevicePrompt() {
     // Show prompt for connecting a device
-    Future<void> future = showModalBottomSheet<void>(
+    showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
           return const BluetoothConnectScreen();
         });
-    // When bottom sheet is closed, call setState so main screen updates
-    future.then((void value) => setState(() {}));
   }
 
   void disconnectDevice() {
     setState(() {
       deviceScreenHandler.stop();
-      connectedDevice!.disconnect();
-      connectedDevice = null;
+      bleHandler.disconnect();
     });
   }
 
@@ -42,30 +51,36 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true,
-      ),
-      body: Center(
+    return Container(
+      decoration: gradientDecoration,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text(widget.title),
+          centerTitle: true,
+        ),
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(connectedDevice == null
+              Text(bleHandler.connectedDevice == null
                   ? "Please connect a device"
-                  : connectedDevice!.name),
+                  : bleHandler.connectedDevice!.name),
               ElevatedButton(
-                onPressed: connectedDevice == null
+                onPressed: bleHandler.connectedDevice == null
                     ? connectDevicePrompt
                     : disconnectDevice,
-                child: Text(connectedDevice == null ? "Connect" : "Disconnect"),
+                child: Text(bleHandler.connectedDevice == null
+                    ? "Connect"
+                    : "Disconnect"),
               ),
-              if (connectedDevice != null)
-              // Temporary to test screen changes
+              // TODO Add rest of user functionality (settings, etc.) here
+              if (bleHandler.connectedDevice != null)
+                // Temporary to test screen changes
                 ElevatedButton(
                     onPressed: () => deviceScreenHandler.nextScreen(),
                     child: const Text("Next Screen")),
-              if (connectedDevice != null)
+              if (bleHandler.connectedDevice != null)
                 Ink(
                   width:200,
                   height: 60,
@@ -82,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                         deviceScreenHandler.displayScreenOn.length, (index) {
                       //using Inkwell widget to create a button
                       return InkWell(
-                          splashColor: AppColors.color3,
+                          splashColor: AppColors.pink,
                           //the default splashColor is grey
                           onTap: () {
                             //set the toggle logic
@@ -106,22 +121,24 @@ class _HomePageState extends State<HomePage> {
                           child: Ink(
                             decoration: BoxDecoration(
                               //set the background color of the button when it is selected/ not selected
-                              color: deviceScreenHandler.displayScreenOn[index] ? Color(0xffD6EAF8) : Colors.white,
+                              color: deviceScreenHandler.displayScreenOn[index] ? AppColors.lightBlue : Colors.white,
                               // here is where we set the rounded corner
                               borderRadius: BorderRadius.circular(8),
                               //don't forget to set the border,
                               //otherwise there will be no rounded corner
-                              border: Border.all(color: AppColors.color1),
+                              border: Border.all(color: AppColors.darkBlue),
                             ),
                             child: Icon(deviceScreenHandler.screens[index].getIcon(),
                                 //set the color of the icon when it is selected/ not selected
-                                color: deviceScreenHandler.displayScreenOn[index] ? AppColors.color1 : Colors.grey),
+                                color: deviceScreenHandler.displayScreenOn[index] ? AppColors.pink : Colors.grey),
                           ));
                     }),
                   ),
                 ),
             ],
-          )),
+          ),
+        )
+      ),
     );
   } //Widget build
 } //_HomePageState
