@@ -16,9 +16,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+1
-flutter:
-  assets:
-    - assets/audios/
+
+  
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -32,6 +31,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  assets_audio_player: ^3.0.3+1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -56,6 +56,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  
+  
+
+  # assets:
+  #   - assets/audios/
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
