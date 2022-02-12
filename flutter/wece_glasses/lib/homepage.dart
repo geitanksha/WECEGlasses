@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wece_glasses/bluetooth.dart';
 import 'globals.dart';
+import 'theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -34,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   loopElements() {
     List<Icon> allIcons = [];
     for (int i = 0; i < deviceScreenHandler.screens.length; i++) {
-      allIcons.add(deviceScreenHandler.screens[i].getIcon());
+      allIcons.add(Icon(deviceScreenHandler.screens[i].getIcon()));
     }
     return allIcons;
   }
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       body: Center(
-        child: Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(connectedDevice == null
@@ -60,35 +61,68 @@ class _HomePageState extends State<HomePage> {
                 child: Text(connectedDevice == null ? "Connect" : "Disconnect"),
               ),
               if (connectedDevice != null)
-                // Temporary to test screen changes
+              // Temporary to test screen changes
                 ElevatedButton(
                     onPressed: () => deviceScreenHandler.nextScreen(),
                     child: const Text("Next Screen")),
               if (connectedDevice != null)
-                ToggleButtons(
-                  children: loopElements(),
-                  isSelected: deviceScreenHandler.displayScreenOn,
-                  onPressed: (int index) {
-                    int count = 0;
-                    for (var val in deviceScreenHandler.displayScreenOn) {
-                      if (val) count++;
-                    }
+                Ink(
+                  width:200,
+                  height: 60,
+                  child: GridView.count(
+                    primary: true,
+                    crossAxisCount:3,
+                    //set the number of buttons in a row
+                    crossAxisSpacing: 8,
+                    //set the spacing between the buttons
+                    childAspectRatio: 1,
+                    //set the width-to-height ratio of the button,
+                    //>1 is a horizontal rectangle
+                    children: List.generate(
+                        deviceScreenHandler.displayScreenOn.length, (index) {
+                      //using Inkwell widget to create a button
+                      return InkWell(
+                          splashColor: AppColors.color3,
+                          //the default splashColor is grey
+                          onTap: () {
+                            //set the toggle logic
+                            int count = 0;
+                            for (var val in deviceScreenHandler.displayScreenOn) {
+                              if (val) count++;
+                            }
 
-                    // At least one screen should be selected at all times
-                    if (deviceScreenHandler.displayScreenOn[index] && count < 2) {
-                      return;
-                    }
+                            // At least one screen should be selected at all times
+                            if (deviceScreenHandler.displayScreenOn[index] && count < 2) {
+                              return;
+                            }
 
-                    // Note that if the current screen is deselected,
-                    // it will only take effect once user moves to next screen
-                    setState(() {
-                      deviceScreenHandler.displayScreenOn[index] =
-                          !deviceScreenHandler.displayScreenOn[index];
-                    }); //setState
-                  },
+                            // Note that if the current screen is deselected,
+                            // it will only take effect once user moves to next screen
+                            setState(() {
+                              deviceScreenHandler.displayScreenOn[index] =
+                              !deviceScreenHandler.displayScreenOn[index];
+                            }); //setState
+                          },
+                          child: Ink(
+                            decoration: BoxDecoration(
+                              //set the background color of the button when it is selected/ not selected
+                              color: deviceScreenHandler.displayScreenOn[index] ? Color(0xffD6EAF8) : Colors.white,
+                              // here is where we set the rounded corner
+                              borderRadius: BorderRadius.circular(8),
+                              //don't forget to set the border,
+                              //otherwise there will be no rounded corner
+                              border: Border.all(color: AppColors.color1),
+                            ),
+                            child: Icon(deviceScreenHandler.screens[index].getIcon(),
+                                //set the color of the icon when it is selected/ not selected
+                                color: deviceScreenHandler.displayScreenOn[index] ? AppColors.color1 : Colors.grey),
+                          ));
+                    }),
+                  ),
                 ),
-            ]),
-      ),
+            ],
+          )),
     );
-  }
-}
+  } //Widget build
+} //_HomePageState
+

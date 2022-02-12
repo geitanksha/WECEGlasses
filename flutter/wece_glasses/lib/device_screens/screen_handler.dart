@@ -7,7 +7,7 @@ import 'package:wece_glasses/device_screens/time_screen.dart';
 abstract class DeviceScreen {
   void startScreen();
   void stopScreen();
-  Icon getIcon();
+  IconData getIcon();
 }
 
 class DeviceScreenHandler {

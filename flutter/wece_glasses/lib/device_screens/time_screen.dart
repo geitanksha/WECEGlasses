@@ -18,8 +18,8 @@ class TimeScreen extends DeviceScreen {
 
   }
   @override
-    Icon getIcon() {
-      return Icon(Icons.access_time);
+    IconData getIcon() {
+      return Icons.access_time;
   }
 
   void _getTime() {
