@@ -83,7 +83,7 @@ class BLEHandler {
 
     void init() {
       // Create device
-      BLEDevice::init("WECEGlasses"); // Name of device
+      BLEDevice::init("TestGlasses"); // Name of device
 
       // Create server
       pServer = BLEDevice::createServer();
