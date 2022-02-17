@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wece_glasses/device_screens/screen_handler.dart';
 import 'package:wece_glasses/globals.dart';
@@ -15,6 +16,11 @@ class TimeScreen extends DeviceScreen {
   @override
   void stopScreen() {
     _timer!.cancel();
+
+  }
+  @override
+    IconData getIcon() {
+      return Icons.access_time;
   }
 
   void _getTime() {

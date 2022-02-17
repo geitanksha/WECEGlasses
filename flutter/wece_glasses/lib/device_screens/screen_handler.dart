@@ -1,20 +1,27 @@
 
 // Base device screen class
+import 'package:flutter/material.dart';
 import 'package:wece_glasses/device_screens/empty_screen.dart';
 import 'package:wece_glasses/device_screens/time_screen.dart';
 
 abstract class DeviceScreen {
   void startScreen();
-  void stopScreen(); 
+  void stopScreen();
+  IconData getIcon();
 }
 
 class DeviceScreenHandler {
-  // TODO add external handling for screen selection
-  List<DeviceScreen> screens = [EmptyScreen(), TimeScreen()];
-  int currentScreenIdx = 0;
+  final List<DeviceScreen> screens = [EmptyScreen(), TimeScreen()];
+
+  // Init in constructor
+  late int currentScreenIdx;
+  late List<bool> displayScreenOn;
   late DeviceScreen currentScreen;
 
   DeviceScreenHandler() {
+    // TODO save state on app close and reuse
+    displayScreenOn = List.filled(screens.length, true);
+    currentScreenIdx = 0;
     currentScreen = screens[currentScreenIdx];
   }
 
@@ -28,10 +35,27 @@ class DeviceScreenHandler {
 
   /// Start sending data for next device screen.
   void nextScreen() {
-    currentScreen.stopScreen();
+    // Find next valid screen
+    int nextScreenIdx = _nextTrueIdx(currentScreenIdx);
 
-    currentScreenIdx = (currentScreenIdx == screens.length - 1) ? 0 : currentScreenIdx+1;
-    currentScreen = screens[currentScreenIdx];
-    currentScreen.startScreen();
+    if(nextScreenIdx != currentScreenIdx) {
+      currentScreen.stopScreen();
+      currentScreenIdx = nextScreenIdx;
+      currentScreen = screens[currentScreenIdx];
+      currentScreen.startScreen();
+    }
+  }
+
+  int _nextTrueIdx(int current) {
+    if(current != displayScreenOn.length - 1) {
+      for(int i = current + 1; i < displayScreenOn.length; i++) {
+        if(displayScreenOn[i]) {
+          return i;
+        }
+      }
+    }
+
+    // This is safe because we can assume there will always be at least one valid index
+    return displayScreenOn.indexWhere((x) => x == true);
   }
 }
