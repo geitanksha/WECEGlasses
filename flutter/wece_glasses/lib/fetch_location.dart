@@ -1,16 +1,11 @@
 import 'dart:convert';
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
-import 'LocationAccess.dart';
 
-var location = new Location();
-
-
+var location = Location();
 
 class UseLocation  {
-
   final String forecast;
 
   //var gridX;
@@ -25,8 +20,6 @@ class UseLocation  {
 } // class Location
 
 Future<String> fetchLocation() async {
-
-
 
   LocationData currentLocation = await location.getLocation();
 
@@ -43,5 +36,4 @@ Future<String> fetchLocation() async {
     // then throw an exception.
     throw Exception('Failed to load album');
   }
-}
 }
