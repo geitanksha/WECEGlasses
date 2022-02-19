@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nowplaying/nowplaying.dart'; //was newly imported for nowplaying
 import 'theme.dart';
 import 'constants.dart';
 import 'homepage.dart';

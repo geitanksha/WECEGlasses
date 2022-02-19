@@ -38,7 +38,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_blue: ^0.8.0
   intl: ^0.17.0
-  spotify_sdk: ^2.2.0
+  nowplaying: ^2.0.6
+  provider: ^6.0.2
   
 
 dev_dependencies:
