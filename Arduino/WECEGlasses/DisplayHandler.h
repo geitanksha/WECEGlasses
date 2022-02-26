@@ -16,7 +16,7 @@
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
 #define OLED_RESET     4 // Reset pin 
 #define SCREEN_ADDRESS 0x3C 
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+//Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 class DisplayHandler {
   public:
@@ -24,6 +24,7 @@ class DisplayHandler {
     Adafruit_SSD1306 oled = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
     // TODO Add methods for writing information to screen
+    /*
     void setup(){
       Serial.begin(9600);
   
@@ -48,17 +49,16 @@ class DisplayHandler {
       // drawing commands to make them visible on screen!
       display.display();
       delay(2000);
-  
-      testscrolltext();    // Draw scrolling text
+
         
       display.invertDisplay(true);
       delay(1000);
       display.invertDisplay(false);
       delay(1000);
     }
-
-    /*
-    void writeSimpleString(String text) {
+    */
+    
+    void writeString(String text) {
       // Very simple example function for writing small text to screen
       oled.clearDisplay();
       
@@ -71,9 +71,8 @@ class DisplayHandler {
       // Pixels are only drawn to screen once display method is called
       oled.display();
 
-      
     }
-    */
+    
      
     // Constructor
     void init() {
@@ -86,24 +85,113 @@ class DisplayHandler {
       }
       
       // TODO Add startup screen
-      //#include
-      /*
-      const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
-      LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-      void setup() {
-        lcd.begin(16, 2);
-        lcd.print("hello, world!");
-      }
-      void loop() {
-        lcd.setCursor(0, 1);
-        lcd.print(millis() / 1000);
-      }  
-      */
+      
+      //writeString("Welcome to WECEGlasses!");
 
-      //writeSimpleString("WECE Glasses");
+      drawline();
+      scrolltext();    // Draw scrolling text
+      drawReverse();
+      
     }
 
   private:
+    void drawline() {
+      int16_t i;
+    
+      oled.clearDisplay(); // Clear display buffer
+    
+      for(i=0; i<oled.width(); i+=4) {
+        oled.drawLine(0, 0, i, oled.height()-1, SSD1306_WHITE);
+        oled.display(); // Update screen with each newly-drawn line
+        delay(1);
+      }
+      for(i=0; i<oled.height(); i+=4) {
+        oled.drawLine(0, 0, oled.width()-1, i, SSD1306_WHITE);
+        oled.display();
+        delay(1);
+      }
+      delay(250);
+    
+      oled.clearDisplay();
+    
+      for(i=0; i<oled.width(); i+=4) {
+        oled.drawLine(0, oled.height()-1, i, 0, SSD1306_WHITE);
+        oled.display();
+        delay(1);
+      }
+      for(i=oled.height()-1; i>=0; i-=4) {
+        oled.drawLine(0, oled.height()-1, oled.width()-1, i, SSD1306_WHITE);
+        oled.display();
+        delay(1);
+      }
+      delay(250);
+    }
+
+  void drawReverse(){
+    int16_t i;
+    
+    oled.clearDisplay();
+
+    for(i=oled.width()-1; i>=0; i-=4) {
+      oled.drawLine(oled.width()-1, oled.height()-1, i, 0, SSD1306_WHITE);
+      oled.display();
+      delay(1);
+    }
+    for(i=oled.height()-1; i>=0; i-=4) {
+      oled.drawLine(oled.width()-1, oled.height()-1, 0, i, SSD1306_WHITE);
+      oled.display();
+      delay(1);
+    }
+    delay(250);
+  
+    oled.clearDisplay();
+  
+    for(i=0; i<oled.height(); i+=4) {
+      oled.drawLine(oled.width()-1, 0, 0, i, SSD1306_WHITE);
+      oled.display();
+      delay(1);
+    }
+    for(i=0; i<oled.width(); i+=4) {
+      oled.drawLine(oled.width()-1, 0, i, oled.height()-1, SSD1306_WHITE);
+      oled.display();
+      delay(1);
+    }
+  
+    delay(2000); // Pause for 2 seconds
+  }
+
+  void scrolltext(){
+    oled.clearDisplay();
+  
+    oled.setTextSize(1); // Draw 1X-scale text
+    oled.setTextColor(SSD1306_WHITE);
+    oled.setCursor(0, 0);
+    oled.println(F("Welcome to WECEGlasses!  "));
+    oled.display();      // Show initial text
+    //oled.clearDisplay();
+    //oled.println(F(""));
+    //oled.display(); 
+    delay(100);
+  
+    // Scroll in various directions, pausing in-between:
+    //oled.startscrollright(0x00, 0x2F);
+    //delay(2000);
+    //oled.stopscroll();
+    oled.startscrollleft(0x00, 0x5F);
+    delay(2000);
+    oled.stopscroll();
+    delay(1000);
+    oled.startscrolldiagright(0x00, 0x07);
+    delay(2000);
+    oled.stopscroll();
+    delay(1000);
+    /*
+    oled.startscrolldiagleft(0x00, 0x07);
+    delay(2000);
+    oled.stopscroll();
+    delay(1000);
+    */
+  }
   
 };
 
