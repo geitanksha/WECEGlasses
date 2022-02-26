@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
-
-var location = Location();
+import 'package:wece_glasses/globals.dart';
 
 class UseLocation  {
+  // Link to weather forecast
   final String forecast;
 
   //var gridX;
@@ -28,8 +28,8 @@ Future<String> fetchLocation() async {
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    UseLocation location =  UseLocation.fromJson(jsonDecode(response.body));
-    return location.forecast;
+    UseLocation useLocation =  UseLocation.fromJson(jsonDecode(response.body));
+    return useLocation.forecast;
 
   } else {
     // If the server did not return a 200 OK response,

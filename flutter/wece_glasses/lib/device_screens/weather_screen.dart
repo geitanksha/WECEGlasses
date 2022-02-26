@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:wece_glasses/fetch_location.dart';
 import 'package:wece_glasses/device_screens/screen_handler.dart';
 import 'package:wece_glasses/globals.dart';
+import 'package:wece_glasses/location_permission.dart';
 
 class WeatherScreen extends DeviceScreen  {
 
@@ -12,7 +13,8 @@ class WeatherScreen extends DeviceScreen  {
 
   @override
   void startScreen() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => fetchWeather());
+    //requestLocationAccess(); // TODO run at startup
+    _timer = Timer.periodic(const Duration(minutes: 30), (Timer t) => fetchWeather());
   }
 
   @override
