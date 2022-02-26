@@ -13,15 +13,35 @@ import 'package:wece_glasses/music_permissions.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:playify/playify.dart';
+import 'package:playify_example/artists.dart';
+import 'package:playify_example/songs.dart';
+
 class MusicScreen extends DeviceScreen {
   Timer? _timer;
-
+  bool fetchingAllSongs = false;
+  bool playing = false;
+  SongInformation? data;
+  
+  var myplayer = Playify();
   @override
   void startScreen() {
     _timer =
-        Timer.periodic(const Duration(seconds: 1), (Timer t) => _getMusic());
+        Timer.periodic(const Duration(seconds: 30), (Timer t) => _getMusic());
   }
+  void sendMusic(){
+      await getNowPlaying();
+      if (data==null)
+        bleHandler.bluetoothWrite("");
+      else
+      {
+        bleHandler.bluetoothWrite(data!.song.title+"/n"+data!.artist.name);
+      }
 
+  }
   @override
   void stopScreen() {
     _timer!.cancel();
@@ -48,6 +68,51 @@ class MusicScreen extends DeviceScreen {
           return Container();
         }))));
   }
+  Future<void> getNowPlaying() async {
+    try {
+      final SongInformation? res = await myplayer.nowPlaying();
+      data=res;
+      
+    } catch (e) {
+      
+        fetchingAllSongs = false;
+      
+    }
+  }
+  Future<void> getIsPlaying() async {
+    try {
+      final bool isPlaying = await myplayer.isPlaying();
+      setState(() {
+        playing = isPlaying;
+      });
+    } catch (e) {
+      setState(() {
+        fetchingAllSongs = false;
+      });
+    }
+  }
+  void playPause() {
+    if (!playing){
+            
+      await myplayer.play();
+      await getIsPlaying();
+      await getNowPlaying();
+      }
+      else
+      {              
+      await myplayer.pause();
+      await getIsPlaying();
+      await getNowPlaying();
+      }
+                      
+  }
+
+  void skipForward(){
+    await myplayer.seekForward();
+  }
+
+  
+
 
 //-___________________________________________________________
 

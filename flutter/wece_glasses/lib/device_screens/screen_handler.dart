@@ -2,7 +2,7 @@
 // Base device screen class
 import 'package:wece_glasses/device_screens/empty_screen.dart';
 import 'package:wece_glasses/device_screens/time_screen.dart';
-
+import 'package:wece_glasses/device_screens/music_screen.dart';
 abstract class DeviceScreen {
   void startScreen();
   void stopScreen(); 
@@ -10,7 +10,7 @@ abstract class DeviceScreen {
 
 class DeviceScreenHandler {
   // TODO add external handling for screen selection
-  List<DeviceScreen> screens = [EmptyScreen(), TimeScreen()];
+  List<DeviceScreen> screens = [EmptyScreen(), TimeScreen(),MusicScreen()];
   int currentScreenIdx = 0;
   late DeviceScreen currentScreen;
 
