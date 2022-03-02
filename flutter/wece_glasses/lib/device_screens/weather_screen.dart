@@ -13,12 +13,14 @@ class WeatherScreen extends DeviceScreen  {
 
   @override
   void startScreen() {
-    //requestLocationAccess(); // TODO run at startup
+    requestLocationAccess(); // TODO run at startup
+    print("**********starting weather screen");
     _timer = Timer.periodic(const Duration(minutes: 30), (Timer t) => fetchWeather());
   }
 
   @override
   void stopScreen() {
+    print("**********stopping weather screen");
     _timer!.cancel();
   }
 
@@ -43,6 +45,7 @@ class Weather {
 
 
 void fetchWeather() async {
+  print("**********starting fetchWeather");
   final response = await http
       .get(Uri.parse(fetchLocation().toString()));
 
