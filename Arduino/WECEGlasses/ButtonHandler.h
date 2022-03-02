@@ -35,33 +35,31 @@ class ButtonHandler {
         //long press detected
         if(pressDuration > PRESS_TIME){
           ret=2;  
-          } 
+        } 
         
         //short press detected
         else{
              if(double_count == 1){ //second double click (should ignore it and NOT detect as a new short press
                 double_count = 0; //reset double click count
-               } 
-               
+             }  
              else{
-                shortDelay.start(750); //set up timer
+                shortDelay.start(550); //set up timer
                 //check if button is pressed again while timer is not done
                 while(!(shortDelay.justFinished())){ 
                      if(digitalRead(BUTTON_PIN) == HIGH){
                         ret = 3; //if pressed then double click is detected
                         double_count = 1;
                         break; 
-                       }
+                     }
                      ret = 1; //if not pressed during timer, then short press is detected
-                    }
-                 }
-           }   
-       
+                }
+             }
+        }  
       }
 
       else if (lastState==LOW && currentState== HIGH){ 
-              pressedTime= millis();
-              }
+        pressedTime= millis();
+      }
         
       lastState = currentState;
       return ret;
