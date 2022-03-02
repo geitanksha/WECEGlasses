@@ -163,34 +163,22 @@ class DisplayHandler {
   void scrolltext(){
     oled.clearDisplay();
   
-    oled.setTextSize(1); // Draw 1X-scale text
+    oled.setTextSize(1); // Draw 2X-scale text
     oled.setTextColor(SSD1306_WHITE);
     oled.setCursor(0, 0);
-    oled.println(F("Welcome to WECEGlasses!  "));
-    oled.display();      // Show initial text
-    //oled.clearDisplay();
-    //oled.println(F(""));
-    //oled.display(); 
+    oled.println(F("WECEGlasses! "));
+    oled.display();   
     delay(100);
   
     // Scroll in various directions, pausing in-between:
-    //oled.startscrollright(0x00, 0x2F);
-    //delay(2000);
-    //oled.stopscroll();
-    oled.startscrollleft(0x00, 0x5F);
-    delay(2000);
+    oled.startscrollleft(0x00, 0x2F);
+    delay(5000);
     oled.stopscroll();
     delay(1000);
     oled.startscrolldiagright(0x00, 0x07);
-    delay(2000);
+    delay(5000);
     oled.stopscroll();
     delay(1000);
-    /*
-    oled.startscrolldiagleft(0x00, 0x07);
-    delay(2000);
-    oled.stopscroll();
-    delay(1000);
-    */
   }
   
 };
