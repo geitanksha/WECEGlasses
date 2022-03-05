@@ -14,14 +14,13 @@ class WeatherScreen extends DeviceScreen  {
   @override
   void startScreen() {
     requestLocationAccess(); // TODO run at startup
-    print("**********starting weather screen");
-    _timer = Timer.periodic(const Duration(minutes: 30), (Timer t) => fetchWeather());
+    fetchWeather();
+    //_timer = Timer.periodic(const Duration(minutes: 30), (Timer t) => fetchWeather());
   }
 
   @override
   void stopScreen() {
-    print("**********stopping weather screen");
-    _timer!.cancel();
+    //_timer!.cancel();
   }
 
   @override
@@ -34,28 +33,32 @@ class WeatherScreen extends DeviceScreen  {
 /// Reads relevant fields from weather api json response
 class Weather {
   final int temperature;
-  final String detailedForecast;
+  final String shortForecast;
 
-  Weather(this.temperature, this.detailedForecast);
+  Weather(this.temperature, this.shortForecast);
 
   Weather.fromJson(Map<String, dynamic> json)
       : temperature = json["properties"]["periods"][0]['temperature'],
-        detailedForecast = json["properties"]["periods"][0]['detailedForecast'];
+        shortForecast = json["properties"]["periods"][0]['shortForecast'];
 }
 
 
 void fetchWeather() async {
-  print("**********starting fetchWeather");
+  Future<String> forecast = fetchLocation();
+  String urlWeather = "";
+  forecast.then((String link) async {
+    urlWeather = link;
+  });
+
   final response = await http
-      .get(Uri.parse(fetchLocation().toString()));
+      .get(Uri.parse(link.toString()));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     Weather weather =  Weather.fromJson(jsonDecode(response.body));
     // TODO figure out formatting
-    print("*************"+ weather.temperature.toString());
-    bleHandler.bluetoothWrite(weather.temperature.toString());
+    bleHandler.bluetoothWrite("temperature:" + weather.temperature.toString() + "\n" + weather.shortForecast);
     //bleHandler.bluetoothWrite(weather.detailedForecast);
   } else {
     // If the server did not return a 200 OK response,

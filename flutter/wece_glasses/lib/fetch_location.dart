@@ -22,25 +22,24 @@ class UseLocation  {
   //String url = "https://api.weather.gov/points/"+ currentLocation.latitude.toString() + "," + currentLocation.longitude.toString();
   //print(url);
 
+String link = "";
 Future<String> fetchLocation() async {
 
   var currentLocation = await location.getLocation();
 
   String url = "https://api.weather.gov/points/"+ currentLocation.latitude.toString() + "," + currentLocation.longitude.toString();
-  print(url);
   final response = await http
       .get(Uri.parse("https://api.weather.gov/points/"+ currentLocation.latitude.toString() + "," + currentLocation.longitude.toString()));
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    print("********Reached status 200");
     UseLocation useLocation =  UseLocation.fromJson(jsonDecode(response.body));
-    return useLocation.forecast;
+    link = useLocation.forecast;
+    return link;
 
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    print("********Did not get status 200");
     throw Exception('Failed to load album');
   }
 }
