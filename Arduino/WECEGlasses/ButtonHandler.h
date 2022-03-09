@@ -1,7 +1,6 @@
 // Button press handler to identify button presses.
 #ifndef ButtonHandler_h
 #define ButtonHandler_h
-#include <millisDelay.h>
 
 // Pin that (external) button is connected to.
 #define BUTTON_PIN 13
@@ -12,53 +11,48 @@ class ButtonHandler {
     int currentState; // Current state of the button
     unsigned long pressedTime=0;
     unsigned long releasedTime=0;
-    const int PRESS_TIME=1500;
-    int double_count = 0; 
-    const int time_btwn = 500;
-    millisDelay shortDelay;
-    
+    unsigned long lastClickedTime=0;
+    int multiClickCounter = 0; 
+
+    // Minimum length of time to be registered as long press
+    const int LONG_PRESS_TIME=500; 
+    // Max time between consecutive presses to be registered as a multi press
+    const int MULTI_CLICK_MAX_TIME = 250; 
+
   public:
-    // Simple logic for reading a button click
     int readState() {
-      
-      int ret = 0; // Default no press read
+
+      unsigned long currentTime = millis();
       currentState = digitalRead(BUTTON_PIN);
- 
+      int ret = -1; // Default no press read
+
+      if (lastState==LOW && currentState== HIGH){ 
+        // Button pressed
+        pressedTime= currentTime;
+        lastState = currentState;
+        return ret;
+      }
 
       // Button was released (That is, pressed then released)
       if(lastState == HIGH && currentState == LOW){ 
-        releasedTime=millis();
+        releasedTime=currentTime;
         
         long pressDuration = releasedTime - pressedTime; //time between when button is pressed and then released
-        long btwnDuration = pressedTime - releasedTime; //time between when button is released and then pressed
         
         //long press detected
-        if(pressDuration > PRESS_TIME){
-          ret=2;  
+        if(pressDuration > LONG_PRESS_TIME && multiClickCounter == 0){
+          ret=0;  
         } 
-        
         //short press detected
-        else{
-             if(double_count == 1){ //second double click (should ignore it and NOT detect as a new short press
-                double_count = 0; //reset double click count
-             }  
-             else{
-                shortDelay.start(550); //set up timer
-                //check if button is pressed again while timer is not done
-                while(!(shortDelay.justFinished())){ 
-                     if(digitalRead(BUTTON_PIN) == HIGH){
-                        ret = 3; //if pressed then double click is detected
-                        double_count = 1;
-                        break; 
-                     }
-                     ret = 1; //if not pressed during timer, then short press is detected
-                }
-             }
+        else {
+          multiClickCounter++;
+          lastClickedTime = releasedTime;
         }  
       }
 
-      else if (lastState==LOW && currentState== HIGH){ 
-        pressedTime= millis();
+      if((currentTime - lastClickedTime) > MULTI_CLICK_MAX_TIME && multiClickCounter > 0) {
+        ret = multiClickCounter;
+        multiClickCounter = 0;
       }
         
       lastState = currentState;
