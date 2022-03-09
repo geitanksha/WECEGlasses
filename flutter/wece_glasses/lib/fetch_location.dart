@@ -22,7 +22,6 @@ class UseLocation  {
   //String url = "https://api.weather.gov/points/"+ currentLocation.latitude.toString() + "," + currentLocation.longitude.toString();
   //print(url);
 
-String link = "";
 Future<String> fetchLocation() async {
 
   var currentLocation = await location.getLocation();
@@ -34,7 +33,7 @@ Future<String> fetchLocation() async {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     UseLocation useLocation =  UseLocation.fromJson(jsonDecode(response.body));
-    link = useLocation.forecast;
+    String link = useLocation.forecast;
     return link;
 
   } else {
