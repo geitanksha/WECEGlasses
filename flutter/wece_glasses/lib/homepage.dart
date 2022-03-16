@@ -52,21 +52,27 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: gradientDecoration,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text(widget.title),
-          centerTitle: true,
-        ),
-        body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image.asset(
-                      'lib/Image/Top_Banner.jpg',
-                      fit: BoxFit.cover,
-                    ),
+        decoration: gradientDecoration,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: Text(widget.title),
+            centerTitle: true,
+          ),
+          body: Stack(
+            children: <Widget>[
+              Align(
+                alignment: Alignment.topCenter,
+                child: Image.asset(
+                  'lib/Image/Top_Banner.jpg',
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
                     Text(bleHandler.connectedDevice == null
                         ? "Please connect a device"
                         : bleHandler.connectedDevice!.name),
@@ -87,11 +93,11 @@ class _HomePageState extends State<HomePage> {
                           child: const Text("Next Screen")),
                     if (bleHandler.connectedDevice != null)
                       Ink(
-                        width:200,
+                        width: 200,
                         height: 60,
                         child: GridView.count(
                           primary: true,
-                          crossAxisCount:3,
+                          crossAxisCount: 3,
                           //set the number of buttons in a row
                           crossAxisSpacing: 8,
                           //set the spacing between the buttons
@@ -99,7 +105,8 @@ class _HomePageState extends State<HomePage> {
                           //set the width-to-height ratio of the button,
                           //>1 is a horizontal rectangle
                           children: List.generate(
-                              deviceScreenHandler.displayScreenOn.length, (index) {
+                              deviceScreenHandler.displayScreenOn.length,
+                              (index) {
                             //using Inkwell widget to create a button
                             return InkWell(
                                 splashColor: AppColors.pink,
@@ -107,12 +114,15 @@ class _HomePageState extends State<HomePage> {
                                 onTap: () {
                                   //set the toggle logic
                                   int count = 0;
-                                  for (var val in deviceScreenHandler.displayScreenOn) {
+                                  for (var val
+                                      in deviceScreenHandler.displayScreenOn) {
                                     if (val) count++;
                                   }
 
                                   // At least one screen should be selected at all times
-                                  if (deviceScreenHandler.displayScreenOn[index] && count < 2) {
+                                  if (deviceScreenHandler
+                                          .displayScreenOn[index] &&
+                                      count < 2) {
                                     return;
                                   }
 
@@ -120,31 +130,39 @@ class _HomePageState extends State<HomePage> {
                                   // it will only take effect once user moves to next screen
                                   setState(() {
                                     deviceScreenHandler.displayScreenOn[index] =
-                                    !deviceScreenHandler.displayScreenOn[index];
+                                        !deviceScreenHandler
+                                            .displayScreenOn[index];
                                   }); //setState
                                 },
                                 child: Ink(
                                   decoration: BoxDecoration(
                                     //set the background color of the button when it is selected/ not selected
-                                    color: deviceScreenHandler.displayScreenOn[index] ? AppColors.lightBlue : Colors.white,
+                                    color: deviceScreenHandler
+                                            .displayScreenOn[index]
+                                        ? AppColors.lightBlue
+                                        : Colors.white,
                                     // here is where we set the rounded corner
                                     borderRadius: BorderRadius.circular(8),
                                     //don't forget to set the border,
                                     //otherwise there will be no rounded corner
-                                    border: Border.all(color: AppColors.darkBlue),
+                                    border:
+                                        Border.all(color: AppColors.darkBlue),
                                   ),
-                                  child: Icon(deviceScreenHandler.screens[index].getIcon(),
+                                  child: Icon(
+                                      deviceScreenHandler.screens[index]
+                                          .getIcon(),
                                       //set the color of the icon when it is selected/ not selected
-                                      color: deviceScreenHandler.displayScreenOn[index] ? AppColors.pink : Colors.grey),
+                                      color: deviceScreenHandler
+                                              .displayScreenOn[index]
+                                          ? AppColors.pink
+                                          : Colors.grey),
                                 ));
                           }),
                         ),
                       ),
-                  ],
-                ),
-        )
-      ),
-    );
+                  ]))
+            ],
+          ),
+        ));
   } //Widget build
 } //_HomePageState
-
