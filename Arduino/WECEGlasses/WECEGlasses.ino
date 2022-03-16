@@ -31,7 +31,7 @@ void loop() {
     ble.notify("0");
   }if(state == 1){
     Serial.println("Short press detected.");
-    ble.notify("1);
+    ble.notify("1");
   }if(state == 2){
     Serial.println("Double press detected.");
     ble.notify("2");
