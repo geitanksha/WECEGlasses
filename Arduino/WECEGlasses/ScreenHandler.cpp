@@ -1,0 +1,47 @@
+#include "ScreenHandler.h"
+
+void ScreenHandler::processIncomingData(std::string _data) {
+  parseData(_data);
+  if(shouldRefreshScreen) {
+    refreshScreen();
+  }
+  
+}
+void ScreenHandler::parseData(std::string _data) {
+  // Processing screen change data
+  String screenDataTemp[3];
+  if(_data[0] == '#') {
+    // Split string by delimeter
+    int arrIdx = 0;
+    String val = "";
+    for(int i = 1; i < _data.length(); i++) {
+      if(_data[i] == DELIMETER) {
+        screenDataTemp[arrIdx] = val;
+        val = "";
+        arrIdx++;
+      } else {
+        val+= _data[i];
+      }
+    }
+
+    screenData.screenNum = screenDataTemp[0].toInt();
+    screenData.screenInfo = screenDataTemp[1];
+    screenData.displayMode = screenDataTemp[2].toInt();
+    
+    shouldRefreshScreen = true;
+  }
+
+  // Other type of data processing if needed
+}
+
+void ScreenHandler::refreshScreen() {
+
+  switch(screenData.screenNum) {
+    case 0: screenOff(); break;
+    case 1: screenTime(); break;
+    case 2: screenWeather(); break;
+    case 3: screenGame(); break;
+  }
+ 
+  shouldRefreshScreen = false;
+}
