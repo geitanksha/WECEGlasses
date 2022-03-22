@@ -4,6 +4,8 @@
 
 #include <Arduino.h>
 
+#include "DisplayHandler.h"
+
 #define DELIMETER '|'
 
 struct ScreenData {
@@ -14,11 +16,14 @@ struct ScreenData {
 
 class ScreenHandler {
   public:
+    void init(DisplayHandler dh);
     void processIncomingData(std::string _data);
+    void processOutgoingData(std::string _data);
     
   private:
     ScreenData screenData;
     bool shouldRefreshScreen = false;
+    DisplayHandler displayHandler;
 
     void parseData(std::string _data);
     void refreshScreen();

@@ -8,6 +8,7 @@
 
 #include <Arduino.h> // For Serial.print()
 
+#include "ScreenHandler.h"
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
@@ -16,6 +17,7 @@
 // Entire class definition should't really be in header file, but this is fine for now.
 class BLEHandler {
   private:
+    ScreenHandler screenHandler;
     BLEServer* pServer = NULL;
     BLECharacteristic* pCharacteristic = NULL;
     BLEAdvertising *pAdvertising = NULL;
@@ -51,16 +53,14 @@ class BLEHandler {
     };
 
     // Callback class for handling incoming data
-    class CharacteristicCallbacks: public BLECharacteristicCallbacks {
+    class CharacteristicCallbacks: public BLECharacteristicCallbacks { 
       // Give class reference to the encapsulating class so we can use its members
       BLEHandler &outer;
       public:
         CharacteristicCallbacks(BLEHandler &outer_) : outer(outer_) {}
- 
+        
       void onWrite(BLECharacteristic *pCharacteristic) {
-        String value = pCharacteristic->getValue().c_str();
-        outer.dataAvailable = true;
-        outer.dataReceived = value;
+        outer.screenHandler.processIncomingData(pCharacteristic->getValue());
       }
     };
 
@@ -69,21 +69,16 @@ class BLEHandler {
       return deviceConnected;
     }
     
-    bool isDataAvailable(){
-      return dataAvailable;
-    }
-
-    String getData() {
-      dataAvailable = false;
-      return dataReceived; 
-    }
-
-    void notify(String s) {
-      pCharacteristic->setValue(s.c_str());
+    void notify(std::string s) {
+      pCharacteristic->setValue(s);
       pCharacteristic->notify();
+
+      // Also notify screen handler
+      screenHandler.processOutgoingData(s);
     }
 
-    void init() {
+    void init(ScreenHandler sh) {
+      screenHandler = sh;
       // Create device
       BLEDevice::init(DEVICE_NAME);
 

@@ -1,5 +1,9 @@
 #include "ScreenHandler.h"
 
+void ScreenHandler::processOutgoingData(std::string _data) {
+  // TODO add any local processing of button clicks, for example for the game
+}
+
 void ScreenHandler::processIncomingData(std::string _data) {
   parseData(_data);
   if(shouldRefreshScreen) {
@@ -7,6 +11,7 @@ void ScreenHandler::processIncomingData(std::string _data) {
   }
   
 }
+
 void ScreenHandler::parseData(std::string _data) {
   // Processing screen change data
   String screenDataTemp[3];
@@ -44,4 +49,26 @@ void ScreenHandler::refreshScreen() {
   }
  
   shouldRefreshScreen = false;
+}
+
+void ScreenHandler::screenOff() {
+  displayHandler.oled.clearDisplay();
+}
+
+void ScreenHandler::init(DisplayHandler dh) {
+  displayHandler = dh;
+}
+
+void ScreenHandler::screenTime() {
+  // TODO nicer formatting
+  displayHandler.writeSimpleString(screenData.screenInfo);
+}
+
+void ScreenHandler::screenWeather() {
+  // TODO nicer formatting
+  displayHandler.writeSimpleString(screenData.screenInfo);
+}
+
+void ScreenHandler::screenGame() {
+  
 }

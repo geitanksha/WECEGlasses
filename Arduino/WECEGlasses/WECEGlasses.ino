@@ -3,27 +3,20 @@
 #include "DisplayHandler.h"
 #include "ButtonHandler.h"
 
-BLEHandler ble;
+
 DisplayHandler displayHandler;
+BLEHandler ble;
 ButtonHandler button;
-//ScreenHandler screenHandler;
+ScreenHandler screenHandler;
 
 void setup() {
   Serial.begin(115200); // Printing for debugging/logging12
-
-  ble.init();
   displayHandler.init();
-  //screenHandler.init();
+  screenHandler.init(displayHandler);
+  ble.init(screenHandler);
 }
 
 void loop() {
-  // Example of how bluetooth reading might work
-  // If bluetooth data available, write data to screen
-  if (ble.isDataAvailable()) {
-    // TODO Add specialized data handling
-    displayHandler.writeSimpleString(ble.getData());
-  }
-
   // Process button clicks
   if(button.readState() == 1) {
     // TODO Change to long click for screen change
