@@ -16,7 +16,6 @@
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
 #define OLED_RESET     4 // Reset pin 
 #define SCREEN_ADDRESS 0x3C 
-//Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 class DisplayHandler {
   public:
@@ -24,39 +23,6 @@ class DisplayHandler {
     Adafruit_SSD1306 oled = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
     // TODO Add methods for writing information to screen
-    /*
-    void setup(){
-      Serial.begin(9600);
-  
-      // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-      if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-        Serial.println(F("SSD1306 allocation failed"));
-        for(;;); // Don't proceed, loop forever
-      }
-    
-      // Show initial display buffer contents on the screen --
-      // the library initializes this with an Adafruit splash screen.
-      display.display();
-      delay(2000); // Pause for 2 seconds
-    
-      // Clear the buffer
-      display.clearDisplay();
-    
-      // Draw a single pixel in white
-      display.drawPixel(10, 10, SSD1306_WHITE);
-    
-      // Show the display buffer on the screen. You MUST call display() after
-      // drawing commands to make them visible on screen!
-      display.display();
-      delay(2000);
-
-        
-      display.invertDisplay(true);
-      delay(1000);
-      display.invertDisplay(false);
-      delay(1000);
-    }
-    */
     
     void writeString(String text) {
       // Very simple example function for writing small text to screen
@@ -70,10 +36,8 @@ class DisplayHandler {
 
       // Pixels are only drawn to screen once display method is called
       oled.display();
-
     }
     
-     
     // Constructor
     void init() {
       Serial.println("Initializing display");
@@ -84,17 +48,18 @@ class DisplayHandler {
         for(;;); // Don't proceed, loop forever
       }
       
-      // TODO Add startup screen
-      
-      //writeString("Welcome to WECEGlasses!");
-
-      drawline();
-      scrolltext();    // Draw scrolling text
-      drawReverse();
-      
+      startUp();
     }
 
   private:
+    void startUp() {
+      drawline();
+      scrolltext("WECEGlasses! ");    // Draw scrolling text
+      drawReverse();
+      oled.clearDisplay();
+      oled.display();
+    }
+    
     void drawline() {
       int16_t i;
     
@@ -160,13 +125,13 @@ class DisplayHandler {
     delay(2000); // Pause for 2 seconds
   }
 
-  void scrolltext(){
+  void scrolltext(String text){
     oled.clearDisplay();
   
-    oled.setTextSize(1); // Draw 2X-scale text
+    oled.setTextSize(1); // Draw 1X-scale text
     oled.setTextColor(SSD1306_WHITE);
     oled.setCursor(0, 0);
-    oled.println(F("WECEGlasses! "));
+    oled.println(text);
     oled.display();   
     delay(100);
   
