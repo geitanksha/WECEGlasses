@@ -56,7 +56,7 @@ void fetchWeather() async {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response, then parse the JSON.
       Weather weather =  Weather.fromJson(jsonDecode(response.body));
-      bleHandler.bluetoothWrite("temperature:" + weather.temperature.toString() + "\n" + weather.shortForecast);
+      bleHandler.bluetoothWrite( weather.temperature.toString());
     } else {
       // If the server did not return a 200 OK response, then throw an exception.
       // TODO more appropriate error handling
