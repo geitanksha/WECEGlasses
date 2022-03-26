@@ -35,7 +35,4 @@ class ScreenHandler {
     void screenGame();
 };
 
-
-
-
 #endif

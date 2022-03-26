@@ -6,7 +6,7 @@
 #include <BLEServer.h>
 #include <BLE2902.h>
 
-#include <Arduino.h> // For Serial.print()
+#include <Arduino.h>
 
 #include "ScreenHandler.h"
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
@@ -14,7 +14,7 @@
 
 #define DEVICE_NAME "WECEGlasses"
 
-// Entire class definition should't really be in header file, but this is fine for now.
+// Entire class definition shouldn't really be in header file, but this is fine for now.
 class BLEHandler {
   private:
     BLEServer* pServer = NULL;
