@@ -10,11 +10,12 @@ import 'package:wece_glasses/globals.dart';
 class WeatherScreen extends DeviceScreen  {
 
   Timer? _timer;
+  String cachedTemp = "Loading";
 
   @override
   void startScreen() {
     // Generating initial weather report takes some time
-    bleHandler.bluetoothWrite("Loading");
+    bleHandler.bluetoothWrite(cachedTemp);
     // To make sure it starts immediately
     fetchWeather();
     // Refresh every 30 minutes after that
@@ -31,6 +32,25 @@ class WeatherScreen extends DeviceScreen  {
     return Icons.cloud;
   }
 
+  void fetchWeather() async {
+    Future<String> forecast = fetchLocation();
+
+    forecast.then((String urlWeather) async {
+      final response = await http
+          .get(Uri.parse(urlWeather.toString()));
+
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response, then parse the JSON.
+        Weather weather =  Weather.fromJson(jsonDecode(response.body));
+        cachedTemp = weather.temperature.toString();
+        bleHandler.bluetoothWrite(cachedTemp);
+      } else {
+        // If the server did not return a 200 OK response, then throw an exception.
+        bleHandler.bluetoothWrite("Unable to retrieve data");
+      }
+    });
+  }
+
 }
 
 /// Reads relevant fields from weather api json response
@@ -45,22 +65,3 @@ class Weather {
         shortForecast = json["properties"]["periods"][0]['shortForecast'];
 }
 
-
-void fetchWeather() async {
-  Future<String> forecast = fetchLocation();
-
-  forecast.then((String urlWeather) async {
-    final response = await http
-        .get(Uri.parse(urlWeather.toString()));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response, then parse the JSON.
-      Weather weather =  Weather.fromJson(jsonDecode(response.body));
-      bleHandler.bluetoothWrite( weather.temperature.toString());
-    } else {
-      // If the server did not return a 200 OK response, then throw an exception.
-      // TODO more appropriate error handling
-      throw Exception('Failed to load album');
-    }
-  });
-}
