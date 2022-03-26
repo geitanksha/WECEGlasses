@@ -43,7 +43,7 @@ class DisplayHandler {
       Serial.println("Initializing display");
       
       // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-       if(!oled.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+      if(!oled.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
         Serial.println("SSD1306 allocation failed");
         for(;;); // Don't proceed, loop forever
       }

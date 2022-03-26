@@ -9,7 +9,6 @@ void ScreenHandler::processIncomingData(std::string _data) {
   if(shouldRefreshScreen) {
     refreshScreen();
   }
-  
 }
 
 void ScreenHandler::parseData(std::string _data) {
@@ -55,8 +54,8 @@ void ScreenHandler::screenOff() {
   displayHandler.oled.clearDisplay();
 }
 
-void ScreenHandler::init(DisplayHandler dh) {
-  displayHandler = dh;
+void ScreenHandler::init() {
+  displayHandler.init();
 }
 
 void ScreenHandler::screenTime() {

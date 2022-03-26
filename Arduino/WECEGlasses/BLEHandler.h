@@ -24,9 +24,6 @@ class BLEHandler {
     
     bool deviceConnected = false;
 
-    bool dataAvailable = false; // Whether data is available
-    String dataReceived; // Actual data that was recieved 
-
     void startAdvertising() {
         delay(500); // Give the bluetooth stack the chance to get things ready
         pAdvertising->start(); 
@@ -79,6 +76,9 @@ class BLEHandler {
 
     void init(ScreenHandler sh) {
       screenHandler = sh;
+      screenHandler.processIncomingData("1|0|yay");
+      return;
+      
       // Create device
       BLEDevice::init(DEVICE_NAME);
 

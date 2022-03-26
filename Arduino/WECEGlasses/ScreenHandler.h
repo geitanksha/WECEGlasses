@@ -16,7 +16,7 @@ struct ScreenData {
 
 class ScreenHandler {
   public:
-    void init(DisplayHandler dh);
+    void init();
     void processIncomingData(std::string _data);
     void processOutgoingData(std::string _data);
     

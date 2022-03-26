@@ -3,24 +3,24 @@
 #include "DisplayHandler.h"
 #include "ButtonHandler.h"
 
-
-DisplayHandler displayHandler;
-BLEHandler ble;
 ButtonHandler button;
 ScreenHandler screenHandler;
+BLEHandler ble;
 
 void setup() {
-  Serial.begin(115200); // Printing for debugging/logging12
-  displayHandler.init();
-  screenHandler.init(displayHandler);
-  ble.init(screenHandler);
+  Serial.begin(115200); // Printing for debugging/logging
+  screenHandler.init();
+  //ble.init(screenHandler);
 }
 
 void loop() {
+  Serial.println("Made it to loop");
   // Process button clicks
+  /*
   if(button.readState() == 1) {
     // TODO Change to long click for screen change
     Serial.println("Button click detected.");
     ble.notify("1");
   }
+  */
 }
