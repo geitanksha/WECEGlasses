@@ -21,7 +21,7 @@ void loop() {
   // If bluetooth data available, write data to screen
   if (ble.isDataAvailable()) {
     // TODO Add specialized data handling
-    displayHandler.writeSimpleString(ble.getData());
+    displayHandler.writeString(ble.getData());
   }
 
   // Process button clicks
