@@ -1,26 +1,18 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:location/location.dart';
 import 'package:wece_glasses/globals.dart';
 
 class UseLocation  {
   // Link to weather forecast
   final String forecast;
 
-  //var gridX;
-  //var gridY;
-
   UseLocation(this.forecast);
 
   UseLocation.fromJson(Map<String, dynamic> json)
       : forecast = json["properties"]["forecast"];
-//gridX = json["properties"]["gridX"],
-//gridY = json["properties"]["gridY"];
-} // class Location
 
-  //String url = "https://api.weather.gov/points/"+ currentLocation.latitude.toString() + "," + currentLocation.longitude.toString();
-  //print(url);
+} // class Location
 
 Future<String> fetchLocation() async {
 
