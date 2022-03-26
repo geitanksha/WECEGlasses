@@ -17,11 +17,13 @@ class AndroidSMSScreen extends DeviceScreen {
   @override
   void startScreen() {
     bleHandler.bluetoothWrite("");
+    print("*******Start Screen********");
     try {
       _smsSubscription = _notifications.notificationStream!.listen(onData);
     } on NotificationException catch (exception) {
       print("AN EXCEPTION!!!");
       print(exception);
+
     }
   }
 
@@ -34,6 +36,9 @@ class AndroidSMSScreen extends DeviceScreen {
   void onData(NotificationEvent event) {
     String title = event.title == null ? "" : event.title.toString() + "\n";
     String message = event.message == null ? "" : event.message.toString();
-    bleHandler.bluetoothWrite(title + "\n" + message);
+    bleHandler.bluetoothWrite(title);
+    bleHandler.bluetoothWrite(message);
+    print("*********This is the notification***********" + title + "\n" + message);
+    print("*********************EVENT**********" + event.toString());
   }
 }
