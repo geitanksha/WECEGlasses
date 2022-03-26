@@ -17,13 +17,15 @@
 // Entire class definition should't really be in header file, but this is fine for now.
 class BLEHandler {
   private:
-    ScreenHandler screenHandler;
     BLEServer* pServer = NULL;
     BLECharacteristic* pCharacteristic = NULL;
     BLEAdvertising *pAdvertising = NULL;
     
     bool deviceConnected = false;
 
+    bool dataAvailable = false; // Whether data is available
+    std::string dataReceived; // Actual data that was recieved 
+    
     void startAdvertising() {
         delay(500); // Give the bluetooth stack the chance to get things ready
         pAdvertising->start(); 
@@ -57,7 +59,8 @@ class BLEHandler {
         CharacteristicCallbacks(BLEHandler &outer_) : outer(outer_) {}
         
       void onWrite(BLECharacteristic *pCharacteristic) {
-        outer.screenHandler.processIncomingData(pCharacteristic->getValue());
+        outer.dataAvailable = true;
+        outer.dataReceived = pCharacteristic->getValue();
       }
     };
 
@@ -65,20 +68,22 @@ class BLEHandler {
     bool isDeviceConnected() {
       return deviceConnected;
     }
+
+        bool isDataAvailable(){
+      return dataAvailable;
+    }
+
+    std::string getData() {
+      dataAvailable = false;
+      return dataReceived;
+    }
     
     void notify(std::string s) {
       pCharacteristic->setValue(s);
       pCharacteristic->notify();
-
-      // Also notify screen handler
-      screenHandler.processOutgoingData(s);
     }
 
-    void init(ScreenHandler sh) {
-      screenHandler = sh;
-      screenHandler.processIncomingData("1|0|yay");
-      return;
-      
+    void init() {      
       // Create device
       BLEDevice::init(DEVICE_NAME);
 
