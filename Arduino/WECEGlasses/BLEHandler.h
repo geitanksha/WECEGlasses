@@ -12,7 +12,7 @@
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
-#define DEVICE_NAME "WECEGlasses"
+#define DEVICE_NAME "displayWECE"
 
 // Entire class definition shouldn't really be in header file, but this is fine for now.
 class BLEHandler {

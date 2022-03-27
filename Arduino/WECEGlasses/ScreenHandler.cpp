@@ -65,7 +65,7 @@ void ScreenHandler::screenTime() {
 
 void ScreenHandler::screenWeather() {
   // TODO nicer formatting
-  displayHandler.writeSimpleString(screenData.screenInfo);
+  displayHandler.writeSimpleString(screenData.screenInfo + char(247) + "F"); 
 }
 
 void ScreenHandler::screenGame() {

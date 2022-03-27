@@ -24,13 +24,13 @@ class DisplayHandler {
 
     // TODO Add methods for writing information to screen
     
-    void writeString(String text) {
+    void writeSimpleString(String text) {
       // Very simple example function for writing small text to screen
       oled.clearDisplay();
       
-      oled.setTextSize(1);              // Normal 1:1 pixel scale
+      oled.setTextSize(2);              // Normal 1:1 pixel scale
       oled.setTextColor(SSD1306_WHITE); // Draw white text
-      oled.setCursor(0,0);              // Start at top-left corner
+      oled.setCursor(45,10);              // Start at top-left corner
       
       oled.println(text); 
 
