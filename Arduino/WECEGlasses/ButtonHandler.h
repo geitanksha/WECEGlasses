@@ -13,10 +13,8 @@ class ButtonHandler {
     unsigned long releasedTime=0;
     const int LONG_PRESS_TIME=500;
      
-    
   public:
-    // Simple logic for reading a button click
-    // TODO add handling to differentiate between long, short, and multi presses. 
+
     int readState() {
       int ret = 0; // Default no press read
       currentState = digitalRead(BUTTON_PIN);
@@ -25,7 +23,7 @@ class ButtonHandler {
         // Button was released (That is, pressed then released)
         releasedTime=millis();
         long pressDuration=releasedTime-pressedTime;
-        if (pressDuration<SHORT_PRESS_TIME) {
+        if (pressDuration < LONG_PRESS_TIME) {
           ret=1; //short press detected
         } else {
           ret=2;  //long press detected
