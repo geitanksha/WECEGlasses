@@ -4,6 +4,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:wece_glasses/globals.dart';
 import 'dart:convert';
 import 'package:wece_glasses/constants.dart';
+import 'dart:io' show Platform;
 
 class BLEHandler {
   late StreamSubscription notificationSubscription;
@@ -51,8 +52,11 @@ class BLEHandler {
         if(characteristic.properties.notify) {
           await characteristic.setNotifyValue(true);
           notificationSubscription = characteristic.value.listen((value) async {
-            // Currently moves to next screen on any input
-            deviceScreenHandler.nextScreen();
+            String s = String.fromCharCodes(value);
+            if(s == Constants.longPressCode) {
+              // Currently moves to next screen on any input
+              deviceScreenHandler.nextScreen();
+            }
           });
           await Future.delayed(const Duration(milliseconds: 500));
           return;
@@ -65,7 +69,14 @@ class BLEHandler {
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
         if (characteristic.uuid.toString() == Constants.uuid) {
-            await characteristic.write(utf8.encode(text), withoutResponse: true);
+            if (Platform.isAndroid)
+            {
+              await characteristic.write(utf8.encode(text), withoutResponse: true);
+            }
+            else if (Platform.isIOS)
+            {
+              await characteristic.write(utf8.encode(text));
+            }
             return;
         }
       }

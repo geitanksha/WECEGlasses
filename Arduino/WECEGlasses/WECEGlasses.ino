@@ -20,10 +20,14 @@ void loop() {
   }
   
   // Process button clicks
-  if(button.readState() == 1) {
-    // TODO Change to long click for screen change
-    Serial.println("Button click detected.");
+  int state = button.readState();
+  if(state == 1) {
+    Serial.println("Short press detected.");
     ble.notify("1");
     screenHandler.processOutgoingData("1");
+  } if(state == 2){
+    Serial.println("Long press detected.");
+    ble.notify("2");
+    screenHandler.processOutgoingData("2");
   }
 }

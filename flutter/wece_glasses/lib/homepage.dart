@@ -4,6 +4,7 @@ import 'package:wece_glasses/theme.dart';
 import 'globals.dart';
 import 'theme.dart';
 import 'bluetooth_handler.dart';
+import 'package:wece_glasses/location_permission.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -19,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     bleHandler = BLEHandler(setStateCallback);
+    requestLocationAccess(); // TODO run at startup
   }
 
   void setStateCallback() {
