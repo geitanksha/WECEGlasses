@@ -9,6 +9,9 @@
 
 #include <Arduino.h>
 
+// If data should be flipped on screen (horizontally mirrored)
+#define FLIP_SCREEN_DATA 1
+
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 // The pins for I2C are defined by the Wire-library. 
 // For the Sparkfun ESP32:       21 (GPIO 22) > SDA, SCL (GPIO 22) > SCL
@@ -28,7 +31,7 @@ class DisplayHandler {
       // Very simple example function for writing small text to screen
       oled.clearDisplay();
       
-      oled.setTextSize(1);              // Normal 1:1 pixel scale
+      oled.setTextSize(2);              // Normal 1:1 pixel scale
       oled.setTextColor(SSD1306_WHITE); // Draw white text
       oled.setCursor(0,0);              // Start at top-left corner
       
@@ -47,8 +50,13 @@ class DisplayHandler {
         Serial.println("SSD1306 allocation failed");
         for(;;); // Don't proceed, loop forever
       }
+
+      if(FLIP_SCREEN_DATA) {
+        oled.ssd1306_command(0xA0); // Enable horizontal mirroring
+      }
       
       startUp();
+      //writeString("WECE\nGlasses");
     }
 
   private:
