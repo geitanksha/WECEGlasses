@@ -52,8 +52,11 @@ class BLEHandler {
         if(characteristic.properties.notify) {
           await characteristic.setNotifyValue(true);
           notificationSubscription = characteristic.value.listen((value) async {
-            // Currently moves to next screen on any input
-            deviceScreenHandler.nextScreen();
+            String s = String.fromCharCodes(value);
+            if(s == Constants.longPressCode) {
+              // Currently moves to next screen on any input
+              deviceScreenHandler.nextScreen();
+            }
           });
           await Future.delayed(const Duration(milliseconds: 500));
           return;
