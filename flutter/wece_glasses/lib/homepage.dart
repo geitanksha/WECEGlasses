@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                         height: 60,
                         child: GridView.count(
                           primary: true,
-                          crossAxisCount: 3,
+                          crossAxisCount: 4,
                           //set the number of buttons in a row
                           crossAxisSpacing: 8,
                           //set the spacing between the buttons
