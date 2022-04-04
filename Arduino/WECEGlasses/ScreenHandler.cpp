@@ -1,7 +1,18 @@
 #include "ScreenHandler.h"
+#include "Game.h"
+
+Game  game;
 
 void ScreenHandler::processOutgoingData(std::string _data) {
   // TODO add any local processing of button clicks, for example for the game
+     if (_data == "1" || Game.t>0){
+        disH.oled.drawRect(ply[maxJ][XPOS],ply[maxJ][YPOS], 10,10, WHITE);
+        stat=1;
+        t++;
+    } 
+    else if (_data == "2"){
+       cancel();
+    }
 }
 
 void ScreenHandler::processIncomingData(std::string _data) {
@@ -79,5 +90,5 @@ void ScreenHandler::screenWeather() {
 }
 
 void ScreenHandler::screenGame() {
-  
+  game.gameStart();
 }
