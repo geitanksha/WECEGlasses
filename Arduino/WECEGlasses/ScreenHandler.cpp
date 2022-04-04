@@ -5,11 +5,11 @@ Game  game;
 
 void ScreenHandler::processOutgoingData(std::string _data) {
   // TODO add any local processing of button clicks, for example for the game
-    if (game.isWaiting == true && _data == "1"){
+    if (game.isWaiting() == true && _data == "1"){
       game.initGame();
       game.gamePlay();
     }
-    if (game.isWaiting == false && (_data == "1" || game.current_t()>0)){
+    if (game.isWaiting() == false && (_data == "1" || game.current_t()>0)){
         game.onJump();
     } 
     else if (_data == "2"){

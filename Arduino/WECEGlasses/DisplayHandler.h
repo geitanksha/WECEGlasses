@@ -10,7 +10,7 @@
 #include <Arduino.h>
 
 // If data should be flipped on screen (horizontally mirrored)
-#define FLIP_SCREEN_DATA 1
+#define FLIP_SCREEN_DATA 0 // PUT BACK TO 1 LATER
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 // The pins for I2C are defined by the Wire-library. 

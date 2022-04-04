@@ -5,7 +5,7 @@
 #include "Game.h"
 
 ButtonHandler button;
-Game  game;
+Game  Game;
 
 uint32_t val = 0; // Temporary for debugging
 ScreenHandler screenHandler;
@@ -22,8 +22,8 @@ void loop() {
   if(ble.isDataAvailable()) {
     screenHandler.processIncomingData(ble.getData());
   }
-  if (game.isPlaying() == true){
-    game.gamePlay();
+  if (Game.isPlaying() == true){
+    Game.gamePlay();
   }
   
   // Process button clicks

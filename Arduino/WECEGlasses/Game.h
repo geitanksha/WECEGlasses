@@ -6,7 +6,7 @@
 #include <Arduino.h>
 #include "ButtonHandler.h"
 #include "DisplayHandler.h"
-#include "ScreenHandler.cpp"
+#include "ScreenHandler.h"
 
 class Game {
   private:
