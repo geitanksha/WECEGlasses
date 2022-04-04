@@ -28,27 +28,49 @@ class Game {
     int delNum = 50;
     int endjump = 0;
     int hit = 0;
+    boolean playing = false;
+    int t = 0;
+    boolean wait_to_play = true;
     
     ButtonHandler  button;
     DisplayHandler disH;
     ScreenHandler screen;
   public:
     // if currenly in game
-    boolean playing = false;
-    int t = 0;
-   
+    boolean isPlaying(){
+      return playing;
+    }
+
+    int current_t(){
+      return t;
+    }
+
+   // what to do when player jumps
+    void onJump(){   
+        disH.oled.drawRect(ply[maxJ][XPOS],ply[maxJ][YPOS], 10,10, WHITE);
+        stat=1;
+        t++;
+    }
+
+    // whether or not the player in on the pre-game screen
+    boolean isWaiting(){ 
+      return wait_to_play;
+    }
+
+    // beginning of game
     void gameStart(){
-      boolean again = true;
-      disH.writeSimpleString("Hit Button\nto Play");                                // button click
-      if(button.readState() == 1){
+      wait_to_play = true;
+      disH.writeSimpleString("Hit Button\nto Play");                                
+      /*if(button.readState() == 1){
           initGame();
-          gamePlay();         // FIX!!!!!!!
-      }  
+          gamePlay();         // called in ScreenHandler.cpp
+      } */ 
     }
     
     // initialize game variables
     void initGame(){
       playing = true;
+      wait_to_play = false;
       hit = 0;
       //initialize obstacle location
       for(int f=0; f < 10; f++){
@@ -99,14 +121,14 @@ class Game {
       
       //draw rectangles
       for(int f=0; f < 10; f++) {
-        if(obst[f][XPOS] <= disH.oled.width()-1 && obst[f][XPOS] >= 0){
+        if(obst[f][XPOS] <= disH.oled.width()-1 && obst[f][XPOS] >= 0 && playing == true){
           disH.oled.fillRect(obst[f][XPOS], obst[f][YPOS], 10, 5, WHITE);
           //player jumps
-          if(button.readState() == 1 || t>0){                                                       //Button click
+          /*if(button.readState() == 1 || t>0){                                                       //Button click effect in screenHandler.cpp
             disH.oled.drawRect(ply[maxJ][XPOS],ply[maxJ][YPOS], 10,10, WHITE);
             stat=1;
             t++;
-          }
+          }*/
           if(t==0){
             disH.oled.drawRect(ply[minJ][XPOS],ply[minJ][YPOS], 10,10, WHITE);
             stat=0;
@@ -186,24 +208,14 @@ class Game {
        disH.oled.println("Score:" + String(score));
        disH.oled.display();
        delay(3000);
+       gameStart();
     }
 
     // end game prematurely
     void cancel(){
       playing = false;
-      break;
     }
 
-    void buttonClick(){ // get right variables names
-      if (SHORT CLICK || t>0){
-          disH.oled.drawRect(ply[maxJ][XPOS],ply[maxJ][YPOS], 10,10, WHITE);
-          stat=1;
-          t++;
-      } 
-      else if (LONG CLICK){
-         cancel();
-      }
-    }
 };
 
 // cancel function

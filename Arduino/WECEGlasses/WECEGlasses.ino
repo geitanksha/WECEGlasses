@@ -22,6 +22,9 @@ void loop() {
   if(ble.isDataAvailable()) {
     screenHandler.processIncomingData(ble.getData());
   }
+  if (game.isPlaying() == true){
+    game.gamePlay();
+  }
   
   // Process button clicks
   int state = button.readState();
