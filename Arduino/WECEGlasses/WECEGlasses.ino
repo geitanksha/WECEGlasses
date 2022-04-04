@@ -2,10 +2,12 @@
 #include "BLEHandler.h"
 #include "DisplayHandler.h"
 #include "ButtonHandler.h"
+#include "Game.h"
 
 BLEHandler ble;
 DisplayHandler displayHandler;
 ButtonHandler button;
+Game  game;
 
 uint32_t val = 0; // Temporary for debugging
 
