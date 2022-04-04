@@ -1,10 +1,8 @@
 #include "ScreenHandler.h"
-#include "Game.h"
-
-Game  game;
 
 void ScreenHandler::processOutgoingData(std::string _data) {
   // TODO add any local processing of button clicks, for example for the game
+  if(game.isPlaying()){
     if (game.isWaiting() == true && _data == "1"){
       game.initGame();
       game.gamePlay();
@@ -12,9 +10,7 @@ void ScreenHandler::processOutgoingData(std::string _data) {
     if (game.isWaiting() == false && (_data == "1" || game.current_t()>0)){
         game.onJump();
     } 
-    else if (_data == "2"){
-       game.cancel();
-    }
+  }
 }
 
 void ScreenHandler::processIncomingData(std::string _data) {
@@ -76,6 +72,7 @@ void ScreenHandler::screenOff() {
 
 void ScreenHandler::init() {
   displayHandler.init();
+  game.init(displayHandler);
 }
 
 void ScreenHandler::screenTime() {

@@ -1,13 +1,9 @@
 // ESP32 device code main for WECEGlasses
 #include "BLEHandler.h"
-#include "DisplayHandler.h"
+#include "ScreenHandler.h"
 #include "ButtonHandler.h"
-#include "Game.h"
 
 ButtonHandler button;
-Game  Game;
-
-uint32_t val = 0; // Temporary for debugging
 ScreenHandler screenHandler;
 BLEHandler ble;
 
@@ -22,8 +18,8 @@ void loop() {
   if(ble.isDataAvailable()) {
     screenHandler.processIncomingData(ble.getData());
   }
-  if (Game.isPlaying() == true){
-    Game.gamePlay();
+  if (screenHandler.game.isPlaying() == true){
+    screenHandler.game.gamePlay();
   }
   
   // Process button clicks

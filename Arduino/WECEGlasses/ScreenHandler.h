@@ -5,6 +5,7 @@
 #include <Arduino.h>
 
 #include "DisplayHandler.h"
+#include "Game.h"
 
 #define DELIMETER '|'
 
@@ -19,6 +20,7 @@ class ScreenHandler {
     void init();
     void processIncomingData(std::string _data);
     void processOutgoingData(std::string _data);
+    Game game;
     
   private:
     ScreenData screenData;

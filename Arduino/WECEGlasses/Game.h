@@ -4,7 +4,6 @@
 #include <Adafruit_SSD1306.h>
 
 #include <Arduino.h>
-#include "ButtonHandler.h"
 #include "DisplayHandler.h"
 #include "ScreenHandler.h"
 
@@ -32,10 +31,12 @@ class Game {
     int t = 0;
     boolean wait_to_play = true;
     
-    ButtonHandler  button;
     DisplayHandler disH;
-    ScreenHandler screen;
   public:
+
+    void init(DisplayHandler dh){
+      disH = dh;
+    }
     // if currenly in game
     boolean isPlaying(){
       return playing;
