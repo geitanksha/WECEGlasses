@@ -5,8 +5,13 @@ void ScreenHandler::processOutgoingData(std::string _data) {
 }
 
 void ScreenHandler::processIncomingData(std::string _data) {
+  for(int i=0; i<_data.length(); i++) {
+    Serial.print(_data[i]);
+  }
+  Serial.println();
   parseData(_data);
   if(shouldRefreshScreen) {
+    Serial.println("Refreshing Screen");
     refreshScreen();
   }
 }
@@ -27,11 +32,12 @@ void ScreenHandler::parseData(std::string _data) {
         val+= _data[i];
       }
     }
-
+    screenDataTemp[arrIdx] = val;
+    
     screenData.screenNum = screenDataTemp[0].toInt();
     screenData.screenInfo = screenDataTemp[1];
     screenData.displayMode = screenDataTemp[2].toInt();
-    
+
     shouldRefreshScreen = true;
   }
 
@@ -52,6 +58,7 @@ void ScreenHandler::refreshScreen() {
 
 void ScreenHandler::screenOff() {
   displayHandler.oled.clearDisplay();
+  displayHandler.oled.display();
 }
 
 void ScreenHandler::init() {
@@ -59,13 +66,16 @@ void ScreenHandler::init() {
 }
 
 void ScreenHandler::screenTime() {
-  // TODO nicer formatting
   displayHandler.writeSimpleString(screenData.screenInfo);
 }
 
 void ScreenHandler::screenWeather() {
-  // TODO nicer formatting
-  displayHandler.writeSimpleString(screenData.screenInfo + char(247) + "F"); 
+  if(screenData.displayMode == 1) {
+    displayHandler.writeSimpleString(screenData.screenInfo);
+  } else {
+    displayHandler.writeSimpleString(screenData.screenInfo + char(247) + "F"); 
+  }
+  
 }
 
 void ScreenHandler::screenGame() {

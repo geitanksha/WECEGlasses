@@ -58,9 +58,14 @@ class BLEHandler {
       public:
         CharacteristicCallbacks(BLEHandler &outer_) : outer(outer_) {}
         
-      void onWrite(BLECharacteristic *pCharacteristic) {
-        outer.dataAvailable = true;
+      void onWrite(BLECharacteristic *pCharacteristic) { 
+        Serial.println("Some data was recieved");
+        // Following two lines need to be in this order or creates a race condition.
+        // Ideally we'd just call the function we want directly from here,
+        // but this'll work.
         outer.dataReceived = pCharacteristic->getValue();
+        outer.dataAvailable = true;
+        
       }
     };
 
@@ -69,7 +74,7 @@ class BLEHandler {
       return deviceConnected;
     }
 
-        bool isDataAvailable(){
+    bool isDataAvailable(){
       return dataAvailable;
     }
 

@@ -33,7 +33,7 @@ class DisplayHandler {
       
       oled.setTextSize(2);              // Normal 1:1 pixel scale
       oled.setTextColor(SSD1306_WHITE); // Draw white text
-      oled.setCursor(45,10);              // Start at top-left corner
+      oled.setCursor(0, 0);              // Start at top-left corner
       
       oled.println(text); 
 
@@ -56,7 +56,7 @@ class DisplayHandler {
       }
       
       startUp();
-      //writeString("WECE\nGlasses");
+      //writeSimpleString("WECE\nGlasses");
     }
 
   private:

@@ -9,8 +9,8 @@ BLEHandler ble;
 
 void setup() {
   Serial.begin(115200); // Printing for debugging/logging
-  screenHandler.init();
   ble.init();
+  screenHandler.init();
 }
 
 void loop() {
@@ -25,7 +25,7 @@ void loop() {
     Serial.println("Short press detected.");
     ble.notify("1");
     screenHandler.processOutgoingData("1");
-  } if(state == 2){
+  } else if(state == 2){
     Serial.println("Long press detected.");
     ble.notify("2");
     screenHandler.processOutgoingData("2");

@@ -7,4 +7,5 @@ class Constants {
 
   // Notification from device corresponding with a long press
   static const String longPressCode = "2";
+
 }
