@@ -54,7 +54,6 @@ class BLEHandler {
           notificationSubscription = characteristic.value.listen((value) async {
             String s = String.fromCharCodes(value);
             if(s == Constants.longPressCode) {
-              // Currently moves to next screen on any input
               deviceScreenHandler.nextScreen();
             }
           });

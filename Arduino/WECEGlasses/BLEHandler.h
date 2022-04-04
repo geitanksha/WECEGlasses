@@ -6,12 +6,15 @@
 #include <BLEServer.h>
 #include <BLE2902.h>
 
-#include <Arduino.h> // For Serial.print()
+#include <Arduino.h>
 
+#include "ScreenHandler.h"
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
-// Entire class definition should't really be in header file, but this is fine for now.
+#define DEVICE_NAME "displayWECE"
+
+// Entire class definition shouldn't really be in header file, but this is fine for now.
 class BLEHandler {
   private:
     BLEServer* pServer = NULL;
@@ -21,8 +24,8 @@ class BLEHandler {
     bool deviceConnected = false;
 
     bool dataAvailable = false; // Whether data is available
-    String dataReceived; // Actual data that was recieved 
-
+    std::string dataReceived; // Actual data that was recieved 
+    
     void startAdvertising() {
         delay(500); // Give the bluetooth stack the chance to get things ready
         pAdvertising->start(); 
@@ -49,16 +52,20 @@ class BLEHandler {
     };
 
     // Callback class for handling incoming data
-    class CharacteristicCallbacks: public BLECharacteristicCallbacks {
+    class CharacteristicCallbacks: public BLECharacteristicCallbacks { 
       // Give class reference to the encapsulating class so we can use its members
       BLEHandler &outer;
       public:
         CharacteristicCallbacks(BLEHandler &outer_) : outer(outer_) {}
- 
-      void onWrite(BLECharacteristic *pCharacteristic) {
-        String value = pCharacteristic->getValue().c_str();
+        
+      void onWrite(BLECharacteristic *pCharacteristic) { 
+        Serial.println("Some data was recieved");
+        // Following two lines need to be in this order or creates a race condition.
+        // Ideally we'd just call the function we want directly from here,
+        // but this'll work.
+        outer.dataReceived = pCharacteristic->getValue();
         outer.dataAvailable = true;
-        outer.dataReceived = value;
+        
       }
     };
 
@@ -66,24 +73,24 @@ class BLEHandler {
     bool isDeviceConnected() {
       return deviceConnected;
     }
-    
+
     bool isDataAvailable(){
       return dataAvailable;
     }
 
-    String getData() {
-      return dataReceived;
+    std::string getData() {
       dataAvailable = false;
+      return dataReceived;
     }
-
-    void notify(String s) {
-      pCharacteristic->setValue(s.c_str());
+    
+    void notify(std::string s) {
+      pCharacteristic->setValue(s);
       pCharacteristic->notify();
     }
 
-    void init() {
+    void init() {      
       // Create device
-      BLEDevice::init("WECEGlasses"); // Name of device
+      BLEDevice::init(DEVICE_NAME);
 
       // Create server
       pServer = BLEDevice::createServer();

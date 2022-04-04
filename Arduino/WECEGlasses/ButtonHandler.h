@@ -32,7 +32,6 @@ class ButtonHandler {
       else if(lastState==LOW && currentState== HIGH){ 
          pressedTime= millis();
       }
-         
 
       lastState = currentState;
       return ret;

@@ -4,35 +4,34 @@
 #include "ButtonHandler.h"
 #include "Game.h"
 
-BLEHandler ble;
-DisplayHandler displayHandler;
 ButtonHandler button;
 Game  game;
 
 uint32_t val = 0; // Temporary for debugging
+ScreenHandler screenHandler;
+BLEHandler ble;
 
 void setup() {
   Serial.begin(115200); // Printing for debugging/logging
-
   ble.init();
-  displayHandler.init();
+  screenHandler.init();
 }
 
 void loop() {
-  // Example of how bluetooth reading might work
-  // If bluetooth data available, write data to screen
-  if (ble.isDataAvailable()) {
-    // TODO Add specialized data handling
-    displayHandler.writeString(ble.getData());
+  // Check for new data
+  if(ble.isDataAvailable()) {
+    screenHandler.processIncomingData(ble.getData());
   }
-
+  
   // Process button clicks
   int state = button.readState();
   if(state == 1) {
     Serial.println("Short press detected.");
     ble.notify("1");
-  } if(state == 2){
+    screenHandler.processOutgoingData("1");
+  } else if(state == 2){
     Serial.println("Long press detected.");
     ble.notify("2");
+    screenHandler.processOutgoingData("2");
   }
 }

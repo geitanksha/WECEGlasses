@@ -6,7 +6,7 @@ import 'package:wece_glasses/globals.dart';
 class EmptyScreen extends DeviceScreen {
   @override
   void startScreen() {
-    bleHandler.bluetoothWrite("");
+    bleHandler.bluetoothWrite(formatData(""));
   }
 
   @override
@@ -15,5 +15,10 @@ class EmptyScreen extends DeviceScreen {
   @override
   IconData getIcon() {
     return Icons.browser_not_supported;
+  }
+
+  @override
+  String getScreenNum() {
+    return "0";
   }
 }
