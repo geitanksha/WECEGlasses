@@ -72,7 +72,7 @@ void ScreenHandler::screenOff() {
 
 void ScreenHandler::init() {
   displayHandler.init();
-  game.init(displayHandler);
+  game.init(&displayHandler);
 }
 
 void ScreenHandler::screenTime() {

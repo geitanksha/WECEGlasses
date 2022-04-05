@@ -31,12 +31,13 @@ class Game {
     int t = 0;
     boolean wait_to_play = true;
     
-    DisplayHandler disH;
+    DisplayHandler *disH;
+    
   public:
-
-    void init(DisplayHandler dh){
+    void init(DisplayHandler *dh){
       disH = dh;
     }
+    
     // if currenly in game
     boolean isPlaying(){
       return playing;
@@ -48,7 +49,7 @@ class Game {
 
    // what to do when player jumps
     void onJump(){   
-        disH.oled.drawRect(ply[maxJ][XPOS],ply[maxJ][YPOS], 10,10, WHITE);
+        disH->oled.drawRect(ply[maxJ][XPOS],ply[maxJ][YPOS], 10,10, WHITE);
         stat=1;
         t++;
     }
@@ -61,7 +62,7 @@ class Game {
     // beginning of game
     void gameStart(){
       wait_to_play = true;
-      disH.writeSimpleString("Hit Button\nto Play");                                
+      disH->writeSimpleString("Hit Button\nto Play");                                
       /*if(button.readState() == 1){
           initGame();
           gamePlay();         // called in ScreenHandler.cpp
@@ -77,24 +78,24 @@ class Game {
       for(int f=0; f < 10; f++){
         space = random(30,60);
         if (f==0){
-          obst[f][XPOS] = disH.oled.width()-1;
+          obst[f][XPOS] = disH->oled.width()-1;
         }
         else{
           obst[f][XPOS]   = obst[f-1][XPOS] + (10+space);
         } 
-        obst[f][YPOS]   = disH.oled.height() - 6;
+        obst[f][YPOS]   = disH->oled.height() - 6;
        }
     
       //Initialize player location
       ply[minJ][XPOS] = 10;
-      ply[minJ][YPOS] = disH.oled.height()-10;
+      ply[minJ][YPOS] = disH->oled.height()-10;
       ply[maxJ][XPOS] = 10;
-      ply[maxJ][YPOS] = disH.oled.height()-20;
+      ply[maxJ][YPOS] = disH->oled.height()-20;
     
       //Set up printing characteristics 
     
-      disH.oled.setTextSize(2);              // Normal 1:1 pixel scale
-      disH.oled.setTextColor(SSD1306_WHITE); // Draw white text
+      disH->oled.setTextSize(2);              // Normal 1:1 pixel scale
+      disH->oled.setTextColor(SSD1306_WHITE); // Draw white text
     }
     
     void gamePlay(){ 
@@ -118,34 +119,34 @@ class Game {
         delNum = 0;
       }
       delay(delNum);
-      disH.oled.clearDisplay();
+      disH->oled.clearDisplay();
       
       //draw rectangles
       for(int f=0; f < 10; f++) {
-        if(obst[f][XPOS] <= disH.oled.width()-1 && obst[f][XPOS] >= 0 && playing == true){
-          disH.oled.fillRect(obst[f][XPOS], obst[f][YPOS], 10, 5, WHITE);
+        if(obst[f][XPOS] <= disH->oled.width()-1 && obst[f][XPOS] >= 0 && playing == true){
+          disH->oled.fillRect(obst[f][XPOS], obst[f][YPOS], 10, 5, WHITE);
           //player jumps
           /*if(button.readState() == 1 || t>0){                                                       //Button click effect in screenHandler.cpp
-            disH.oled.drawRect(ply[maxJ][XPOS],ply[maxJ][YPOS], 10,10, WHITE);
+            disH->oled.drawRect(ply[maxJ][XPOS],ply[maxJ][YPOS], 10,10, WHITE);
             stat=1;
             t++;
           }*/
           if(t==0){
-            disH.oled.drawRect(ply[minJ][XPOS],ply[minJ][YPOS], 10,10, WHITE);
+            disH->oled.drawRect(ply[minJ][XPOS],ply[minJ][YPOS], 10,10, WHITE);
             stat=0;
           }
           if(obst[f][XPOS] >= 0 && obst[f][XPOS] <=20){
             near = 1;
           }
           
-          disH.oled.display();
+          disH->oled.display();
         } 
       }
   
       //display current score
-      disH.oled.setCursor(30, 0); 
-      disH.oled.print("Score:"+ String(score));
-      disH.oled.display();
+      disH->oled.setCursor(30, 0); 
+      disH->oled.print("Score:"+ String(score));
+      disH->oled.display();
       
       //Test if jumping over obstacle 
       if(near == 1 && stat == 1){
@@ -174,19 +175,19 @@ class Game {
             // If rectangle is off the bottom of the screen...
             if (obst[f][XPOS] < 0) {
               if(f == 0){
-                if(obst[10-1][XPOS] > disH.oled.width()-5){
+                if(obst[10-1][XPOS] > disH->oled.width()-5){
                   obst[f][XPOS]   = obst[10-1][XPOS] + 10 + space;
                 }
                 else{
-                  obst[f][XPOS]   = disH.oled.width();           
+                  obst[f][XPOS]   = disH->oled.width();           
                 }
               }
               else {
-               if(obst[f-1][XPOS] > disH.oled.width()-5){
+               if(obst[f-1][XPOS] > disH->oled.width()-5){
                   obst[f][XPOS]   = obst[f-1][XPOS] + 10 + space;
                 }
                 else{
-                  obst[f][XPOS]   = disH.oled.width();           
+                  obst[f][XPOS]   = disH->oled.width();           
                 }
               }
             }
@@ -202,12 +203,12 @@ class Game {
     // game over end screen
     void gameOver(){
        //GAME OVER
-       disH.oled.clearDisplay();
-       disH.oled.setCursor(0,0);              // Start at top-left corner
-       disH.oled.println("GAME OVER"); 
-       //disH.writeSimpleString("GAME OVER");
-       disH.oled.println("Score:" + String(score));
-       disH.oled.display();
+       disH->oled.clearDisplay();
+       disH->oled.setCursor(0,0);              // Start at top-left corner
+       disH->oled.println("GAME OVER"); 
+       //disH->writeSimpleString("GAME OVER");
+       disH->oled.println("Score:" + String(score));
+       disH->oled.display();
        delay(3000);
        gameStart();
     }

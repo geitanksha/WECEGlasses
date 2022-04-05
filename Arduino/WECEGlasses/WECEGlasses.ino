@@ -18,11 +18,13 @@ void loop() {
   if(ble.isDataAvailable()) {
     screenHandler.processIncomingData(ble.getData());
   }
-  if (screenHandler.game.isPlaying() == true){
+  
+  if (screenHandler.game.isPlaying()){
     screenHandler.game.gamePlay();
   }
   
   // Process button clicks
+  Serial.println("checking button state");
   int state = button.readState();
   if(state == 1) {
     Serial.println("Short press detected.");

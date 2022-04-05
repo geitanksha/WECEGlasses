@@ -3,7 +3,7 @@
 #define ButtonHandler_h
 
 // Pin that (external) button is connected to.
-#define BUTTON_PIN 12
+#define BUTTON_PIN 13
 
 class ButtonHandler {
   private:
