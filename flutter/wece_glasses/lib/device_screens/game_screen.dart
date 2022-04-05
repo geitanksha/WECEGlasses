@@ -13,17 +13,15 @@ class GameScreen extends DeviceScreen {
 
   @override
   void startScreen() {
-    bleHandler.bluetoothWrite(formatData("", 0));
+    bleHandler.bluetoothWrite("", getScreenNum(), 0);
   }
 
   @override
-  void stopScreen() {
-    bleHandler.bluetoothWrite(formatData("", 1));
-  }
+  void stopScreen() {}
 
   @override
-  String getScreenNum() {
-    return "3";
+  int getScreenNum() {
+    return 3;
   }
 
 }

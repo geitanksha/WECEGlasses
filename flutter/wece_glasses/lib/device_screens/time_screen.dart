@@ -26,7 +26,7 @@ class TimeScreen extends DeviceScreen {
   void _getTime() {
     final DateTime now = DateTime.now();
     final String _timeString = _formatDateTime(now);
-    bleHandler.bluetoothWrite(formatData(_timeString));
+    bleHandler.bluetoothWrite(_timeString, getScreenNum());
   }
 
   String _formatDateTime(DateTime dateTime) {
@@ -36,8 +36,8 @@ class TimeScreen extends DeviceScreen {
   }
 
   @override
-  String getScreenNum() {
-    return "1";
+  int getScreenNum() {
+    return 1;
   }
 }
 

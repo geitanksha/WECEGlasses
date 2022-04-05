@@ -10,13 +10,7 @@ abstract class DeviceScreen {
   void startScreen();
   void stopScreen();
   IconData getIcon();
-  String getScreenNum();
-
-  String formatData(String data, [int mode = 0]) {
-    String ret = "#" + getScreenNum() + "|" + data + "|" + mode.toString();
-    print(ret);
-    return ret;
-  }
+  int getScreenNum();
 }
 
 class DeviceScreenHandler {

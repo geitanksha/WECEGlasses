@@ -16,7 +16,7 @@ class WeatherScreen extends DeviceScreen  {
   void startScreen() {
     // Generating initial weather report takes some time
     int mode = cachedTemp == "Loading" ? 1 : 0;
-    bleHandler.bluetoothWrite(formatData(cachedTemp, mode));
+    bleHandler.bluetoothWrite(cachedTemp, getScreenNum(), mode);
     // To make sure it starts immediately
     fetchWeather();
     // Refresh every 30 minutes after that
@@ -44,18 +44,18 @@ class WeatherScreen extends DeviceScreen  {
         // If the server did return a 200 OK response, then parse the JSON.
         Weather weather =  Weather.fromJson(jsonDecode(response.body));
         cachedTemp = weather.temperature.toString();
-        bleHandler.bluetoothWrite(formatData(cachedTemp));
+        bleHandler.bluetoothWrite(cachedTemp, getScreenNum());
       } else {
         // If the server did not return a 200 OK response, then throw an exception.
-        bleHandler.bluetoothWrite(formatData("Unable to retrieve data", 1));
+        bleHandler.bluetoothWrite("Unable to retrieve data", getScreenNum(), 1);
 
       }
     });
   }
 
   @override
-  String getScreenNum() {
-    return "2";
+  int getScreenNum() {
+    return 2;
   }
 
 }
