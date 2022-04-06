@@ -17,7 +17,9 @@ class GameScreen extends DeviceScreen {
   }
 
   @override
-  void stopScreen() {}
+  void stopScreen() {
+    bleHandler.bluetoothWrite("", getScreenNum(), 1);
+  }
 
   @override
   int getScreenNum() {

@@ -14,7 +14,7 @@ abstract class DeviceScreen {
 }
 
 class DeviceScreenHandler {
-  final List<DeviceScreen> screens = [EmptyScreen(), TimeScreen(), GameScreen(), WeatherScreen()];
+  final List<DeviceScreen> screens = [TimeScreen(), WeatherScreen(), GameScreen(), EmptyScreen()];
   // Init in constructor
   late int currentScreenIdx;
   late List<bool> displayScreenOn;
