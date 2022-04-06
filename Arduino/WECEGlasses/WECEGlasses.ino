@@ -24,7 +24,6 @@ void loop() {
   }
   
   // Process button clicks
-  Serial.println("checking button state");
   int state = button.readState();
   if(state == 1) {
     Serial.println("Short press detected.");
