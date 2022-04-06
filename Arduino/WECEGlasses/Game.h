@@ -59,6 +59,7 @@ class Game {
       return wait_to_play;
     }
 
+
     // beginning of game
     void gameStart(){
       wait_to_play = true;
@@ -74,6 +75,11 @@ class Game {
       playing = true;
       wait_to_play = false;
       hit = 0;
+      stat = 0;
+      validJump = 0;
+      score = 0;
+      endjump = 0;
+      t = 0;
       //initialize obstacle location
       for(int f=0; f < 10; f++){
         space = random(30,60);
@@ -131,7 +137,11 @@ class Game {
             stat=1;
             t++;
           }*/
-          if(t==0){
+          if (t>=1){
+            t++;
+            disH->oled.drawRect(ply[maxJ][XPOS],ply[maxJ][YPOS], 10,10, WHITE);
+          }
+          else if(t==0){
             disH->oled.drawRect(ply[minJ][XPOS],ply[minJ][YPOS], 10,10, WHITE);
             stat=0;
           }
@@ -209,7 +219,9 @@ class Game {
        //disH->writeSimpleString("GAME OVER");
        disH->oled.println("Score:" + String(score));
        disH->oled.display();
-       delay(3000);
+       hit = 0;
+       delay(1000);
+       playing = false;
        gameStart();
     }
 
