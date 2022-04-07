@@ -30,9 +30,7 @@ class TimeScreen extends DeviceScreen {
   }
 
   String _formatDateTime(DateTime dateTime) {
-    // TODO Add full formatting info
-    //return DateFormat('MM/dd/yy\nhh:mm').format(dateTime);
-    return DateFormat('hh:mm:ss').format(dateTime);
+    return DateFormat('MM/dd/yy\nhh:mm').format(dateTime);
   }
 
   @override

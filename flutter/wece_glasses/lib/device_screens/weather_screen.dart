@@ -47,7 +47,7 @@ class WeatherScreen extends DeviceScreen  {
         bleHandler.bluetoothWrite(cachedTemp, getScreenNum());
       } else {
         // If the server did not return a 200 OK response, then throw an exception.
-        bleHandler.bluetoothWrite("Unable to retrieve data", getScreenNum(), 1);
+        bleHandler.bluetoothWrite("Not available", getScreenNum(), 1);
       }
     });
   }
