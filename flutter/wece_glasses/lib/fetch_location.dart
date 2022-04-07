@@ -18,7 +18,6 @@ Future<String> fetchLocation() async {
 
   var currentLocation = await location.getLocation();
 
-  String url = "https://api.weather.gov/points/"+ currentLocation.latitude.toString() + "," + currentLocation.longitude.toString();
   final response = await http
       .get(Uri.parse("https://api.weather.gov/points/"+ currentLocation.latitude.toString() + "," + currentLocation.longitude.toString()));
   if (response.statusCode == 200) {
@@ -30,7 +29,8 @@ Future<String> fetchLocation() async {
 
   } else {
     // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
+    // then return Urbana coordinates.
+    // TODO alternative error handling
+    return "https://api.weather.gov/gridpoints/TOP/40,88/forecast";
   }
 }

@@ -55,7 +55,6 @@ class BLEHandler {
             String s = String.fromCharCodes(value);
             if(s == Constants.longPressCode) {
               deviceScreenHandler.nextScreen();
-              print("button click");
             }
           });
           await Future.delayed(const Duration(milliseconds: 500));

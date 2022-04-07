@@ -40,14 +40,15 @@ class _BluetoothConnectScreen extends State<BluetoothConnectScreen> {
         .asStream()
         .listen((List<BluetoothDevice> devices) {
       for (BluetoothDevice device in devices) {
-        if (!temp.contains(device)) {
+        // Not including devices without names for brevity.
+        if (!temp.contains(device) && device.name != "") {
           temp.add(device);
         }
       }
     });
     flutterBlue.scanResults.listen((List<ScanResult> results) {
       for (ScanResult result in results) {
-        if (!temp.contains(result.device)) {
+        if (!temp.contains(result.device) && result.device.name != "") {
           temp.add(result.device);
         }
       }
