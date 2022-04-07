@@ -8,11 +8,12 @@ void ScreenHandler::processOutgoingData(std::string _data) {
       game.gamePlay();
     }
   }
-  if(game.isWaiting() == false){
+  if(game.isWaiting() == false && game.isPlaying()){
     if (_data == "1" || game.current_t()>0){
         game.onJump();
     } 
   }
+  // For good measure
   if(_data == "2"){
     game.cancel();
   }

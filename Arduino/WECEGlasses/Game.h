@@ -29,7 +29,7 @@ class Game {
     int hit = 0;
     boolean playing = false;
     int t = 0;
-    boolean wait_to_play = true;
+    boolean wait_to_play = false;
     
     DisplayHandler *disH;
     
@@ -64,10 +64,6 @@ class Game {
     void gameStart(){
       wait_to_play = true;
       disH->writeSimpleString("Hit Button\nto Play");                                
-      /*if(button.readState() == 1){
-          initGame();
-          gamePlay();         // called in ScreenHandler.cpp
-      } */ 
     }
     
     // initialize game variables
@@ -228,11 +224,7 @@ class Game {
     // end game prematurely
     void cancel(){
       playing = false;
+      wait_to_play = false;
     }
 
 };
-
-// cancel function
-// game play function  x
-// variables as class varaibles x
-// initialization function x

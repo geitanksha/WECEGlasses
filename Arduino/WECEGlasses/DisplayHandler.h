@@ -16,8 +16,8 @@
 // The pins for I2C are defined by the Wire-library. 
 // For the Sparkfun ESP32:       21 (GPIO 22) > SDA, SCL (GPIO 22) > SCL
 #define SCREEN_WIDTH   128 // OLED display width, in pixels
-#define SCREEN_HEIGHT  32 // OLED display height, in pixels
-#define OLED_RESET     4 // Reset pin 
+#define SCREEN_HEIGHT  32  // OLED display height, in pixels
+#define OLED_RESET     4   // Reset pin 
 #define SCREEN_ADDRESS 0x3C 
 
 class DisplayHandler {

@@ -9,8 +9,8 @@ BLEHandler ble;
 
 void setup() {
   Serial.begin(115200); // Printing for debugging/logging
-  ble.init();
   screenHandler.init();
+  ble.init();
 }
 
 void loop() {
