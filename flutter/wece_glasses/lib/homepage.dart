@@ -87,19 +87,13 @@ class _HomePageState extends State<HomePage> {
                           ? "Connect"
                           : "Disconnect"),
                     ),
-                    // TODO Add rest of user functionality (settings, etc.) here
-                    if (bleHandler.connectedDevice != null)
-                      // Temporary to test screen changes
-                      ElevatedButton(
-                          onPressed: () => deviceScreenHandler.nextScreen(),
-                          child: const Text("Next Screen")),
                     if (bleHandler.connectedDevice != null)
                       Ink(
                         width: 200,
                         height: 60,
                         child: GridView.count(
                           primary: true,
-                          crossAxisCount: 3,
+                          crossAxisCount: 4,
                           //set the number of buttons in a row
                           crossAxisSpacing: 8,
                           //set the spacing between the buttons

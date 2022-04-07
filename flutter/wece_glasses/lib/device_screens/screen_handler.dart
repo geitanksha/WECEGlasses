@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:wece_glasses/device_screens/empty_screen.dart';
 import 'package:wece_glasses/device_screens/time_screen.dart';
 import 'package:wece_glasses/device_screens/weather_screen.dart';
+import 'package:wece_glasses/device_screens/game_screen.dart';
 
 abstract class DeviceScreen {
   void startScreen();
   void stopScreen();
   IconData getIcon();
+  int getScreenNum();
 }
 
 class DeviceScreenHandler {
-  final List<DeviceScreen> screens = [EmptyScreen(), TimeScreen(), WeatherScreen()];
+  final List<DeviceScreen> screens = [TimeScreen(), WeatherScreen(), GameScreen(), EmptyScreen()];
   // Init in constructor
   late int currentScreenIdx;
   late List<bool> displayScreenOn;

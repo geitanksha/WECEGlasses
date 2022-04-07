@@ -54,8 +54,8 @@ class BLEHandler {
           notificationSubscription = characteristic.value.listen((value) async {
             String s = String.fromCharCodes(value);
             if(s == Constants.longPressCode) {
-              // Currently moves to next screen on any input
               deviceScreenHandler.nextScreen();
+              print("button click");
             }
           });
           await Future.delayed(const Duration(milliseconds: 500));
@@ -65,17 +65,24 @@ class BLEHandler {
     }
   }
 
-  void bluetoothWrite(text) async {
+  void bluetoothWrite(text, screenNum, [mode=0]) async {
     for (BluetoothService service in services) {
       for (BluetoothCharacteristic characteristic in service.characteristics) {
         if (characteristic.uuid.toString() == Constants.uuid) {
+
+            if(screenNum != deviceScreenHandler.currentScreen.getScreenNum()){
+              return; // Data not related to current screen. Don't send.
+            }
+            // Format data
+            String data = "#" + screenNum.toString() + "|" + text + "|" + mode.toString();
+
             if (Platform.isAndroid)
             {
-              await characteristic.write(utf8.encode(text), withoutResponse: true);
+              await characteristic.write(utf8.encode(data), withoutResponse: true);
             }
             else if (Platform.isIOS)
             {
-              await characteristic.write(utf8.encode(text));
+              await characteristic.write(utf8.encode(data));
             }
             return;
         }

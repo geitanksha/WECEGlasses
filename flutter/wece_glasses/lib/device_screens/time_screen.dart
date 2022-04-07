@@ -26,12 +26,18 @@ class TimeScreen extends DeviceScreen {
   void _getTime() {
     final DateTime now = DateTime.now();
     final String _timeString = _formatDateTime(now);
-    bleHandler.bluetoothWrite(_timeString);
+    bleHandler.bluetoothWrite(_timeString, getScreenNum());
   }
 
   String _formatDateTime(DateTime dateTime) {
     // TODO Add full formatting info
-    return DateFormat('MM/dd/yyyy hh:mm:ss').format(dateTime);
+    //return DateFormat('MM/dd/yy\nhh:mm').format(dateTime);
+    return DateFormat('hh:mm:ss').format(dateTime);
+  }
+
+  @override
+  int getScreenNum() {
+    return 1;
   }
 }
 
